@@ -7,7 +7,22 @@ using BackendGestionProyectosLiquidaciones.Dao;
 
 namespace BackendGestionProyectosLiquidaciones.Service
 {
-    public class UsuarioService
+    public interface IUsuarioService
+    {
+        Usuario FindUsuario(Usuario usuario);
+
+        Usuario FindUsuarioById(int IdUsuario);
+
+        bool CrearUsuario(Usuario usuario);
+
+        bool ModificarUsuario(Usuario usuario);
+
+        void EliminarUsuario(int IdUsuario);
+
+    }
+
+
+    public class UsuarioService : IUsuarioService
     {
         private UsuarioDao _usuarioDao;
 
@@ -21,7 +36,11 @@ namespace BackendGestionProyectosLiquidaciones.Service
             return _usuarioDao.FindUsuario(usuario);
         }
 
-        /* ----- ABM ----- */
+        public Usuario FindUsuarioById(int IdUsuario)
+        {
+            return _usuarioDao.FindUsuarioByID(IdUsuario);
+        }
+
         public bool CrearUsuario(Usuario usuario)
         {
             return _usuarioDao.CrearUsuario(usuario);

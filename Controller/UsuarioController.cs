@@ -52,7 +52,7 @@ namespace BackendGestionProyectosLiquidaciones.Controller
 
         [HttpDelete("{IdUsuario}")]
         [Authorize]
-        public IActionResult EliminarUsuario(int IdUsuario)
+        public IActionResult EliminarUsuario([FromRoute] int IdUsuario)
         {
             _usuarioService.EliminarUsuario(IdUsuario);
             return Ok();
