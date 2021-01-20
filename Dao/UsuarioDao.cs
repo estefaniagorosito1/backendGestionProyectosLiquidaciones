@@ -10,6 +10,8 @@ namespace BackendGestionProyectosLiquidaciones.Dao
     {
         Usuario FindUsuario(Usuario usuario);
 
+        Usuario FindUsuarioByID(int IdUsuario);
+
         bool CrearUsuario(Usuario usuario);
 
         bool ModificarUsuario(Usuario usuario);
@@ -28,6 +30,14 @@ namespace BackendGestionProyectosLiquidaciones.Dao
             {
                 return _ctx.Usuario.FirstOrDefault(user => user.NombreUsuario == usuario.NombreUsuario
                                                            & user.PasswordUsuario == usuario.PasswordUsuario);
+            }
+        }
+
+        public Usuario FindUsuarioByID(int IdUsuario)
+        {
+            using (_ctx)
+            {
+                return _ctx.Usuario.FirstOrDefault(user => user.Idusuario == IdUsuario);
             }
         }
 
@@ -77,6 +87,7 @@ namespace BackendGestionProyectosLiquidaciones.Dao
                 _ctx.SaveChanges();
             }
         }
+
 
     }
 }
