@@ -16,7 +16,9 @@ namespace BackendGestionProyectosLiquidaciones.Dao
 
         void EliminarCliente(Cliente cliente);
 
-        void Guardar(Cliente cliente);
+        void CrearCliente(Cliente cliente);
+
+        void ModificarCliente(Cliente cliente);
     }
 
 
@@ -63,6 +65,15 @@ namespace BackendGestionProyectosLiquidaciones.Dao
             }
         }
 
+        public void CrearCliente(Cliente cliente)
+        {
+            using (_ctx)
+            {
+                _ctx.Cliente.Add(cliente);
+                _ctx.SaveChanges();
+            }
+        }
+
         public void EliminarCliente(Cliente cliente)
         {
             using (_ctx)
@@ -72,15 +83,15 @@ namespace BackendGestionProyectosLiquidaciones.Dao
             }
         }
 
-        public void Guardar(Cliente cliente)
+        public void ModificarCliente(Cliente cliente)
         {
-            using (_ctx)
+            Cliente clienteDB = FindCliente(cliente.Idcliente);
+
+            if (clienteDB != null)
             {
-                _ctx.Cliente.Add(cliente);
-                _ctx.SaveChanges();
+                _ctx.Update(cliente);
             }
+            
         }
-
-
     }
 }

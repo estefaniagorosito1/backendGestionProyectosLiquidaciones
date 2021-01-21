@@ -73,7 +73,7 @@ namespace BackendGestionProyectosLiquidaciones.Dao
                 var user = _ctx.Usuario.First(us => us.Idusuario == usuario.Idusuario);
                 if (user != null)
                 {
-                    user = usuario;
+                    _ctx.Update(usuario);
                     _ctx.SaveChanges();
                     return true;
                 }

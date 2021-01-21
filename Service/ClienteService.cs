@@ -43,7 +43,7 @@ namespace BackendGestionProyectosLiquidaciones.Service
 
         public void CrearCliente(Cliente cliente)
         {
-            _clienteDao.Guardar(cliente);
+            _clienteDao.CrearCliente(cliente);
         }
 
         public bool ModificarCliente(Cliente cliente)
@@ -52,7 +52,7 @@ namespace BackendGestionProyectosLiquidaciones.Service
 
             if (clienteDB != null && cliente.Idcliente == clienteDB.Idcliente)
             {
-                _clienteDao.Guardar(cliente);
+                _clienteDao.ModificarCliente(cliente);
                 return true;
             }
 
