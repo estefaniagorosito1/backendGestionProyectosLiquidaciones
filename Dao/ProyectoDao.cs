@@ -9,15 +9,19 @@ namespace BackendGestionProyectosLiquidaciones.Dao
     public interface IProyectoDao
     {
 
-        bool Guardar(Proyecto proyecto);
+        List<Proyecto> FindProyectos();
+
+        List<Proyecto> FindProyectosByCliente(int IdCliente);
+
+        List<Proyecto> FindProyectosByNombre(string nombre);
+
+        Proyecto FindProyectoByID(int IdProyecto);
+
+        void CrearProyecto(Proyecto proyecto);
+
+        bool ModificarProyecto(Proyecto proyecto);
 
         void EliminarProyecto(int IdProyecto);
-
-        List<Proyecto> GetProyectos();
-
-        List<Proyecto> GetProyectosByCliente(int IdCliente);
-
-        List<Proyecto> GetProyectosByNombre(string nombre);
 
     }
 
@@ -31,7 +35,7 @@ namespace BackendGestionProyectosLiquidaciones.Dao
             _ctx = ctx;
         }
 
-        public List<Proyecto> GetProyectos()
+        public List<Proyecto> FindProyectos()
         {
             using (_ctx)
             {
@@ -40,7 +44,7 @@ namespace BackendGestionProyectosLiquidaciones.Dao
             }
         }
 
-        public List<Proyecto> GetProyectosByCliente(int IdCliente)
+        public List<Proyecto> FindProyectosByCliente(int IdCliente)
         {
             using (_ctx)
             {
@@ -52,7 +56,7 @@ namespace BackendGestionProyectosLiquidaciones.Dao
             }
         }
 
-        public List<Proyecto> GetProyectosByNombre(string nombre)
+        public List<Proyecto> FindProyectosByNombre(string nombre)
         {
             using (_ctx)
             {
@@ -63,22 +67,38 @@ namespace BackendGestionProyectosLiquidaciones.Dao
             }
         }
 
-        public bool Guardar(Proyecto proyecto)
+        public Proyecto FindProyectoByID(int IdProyecto)
         {
             using (_ctx)
             {
-                try
-                {
-                    _ctx.Proyecto.Add(proyecto);
-                    _ctx.SaveChanges();
-                    return true;
-                }
-                catch (Exception)
-                {
-                    return false;
+                var proyecto = _ctx.Proyecto
+                                   .Where(p => p.Idproyecto.Equals(IdProyecto))
+                                   .FirstOrDefault();
 
-                }
+                return proyecto;
             }
+        }
+
+        public void CrearProyecto(Proyecto proyecto)
+        {
+            using (_ctx)
+            {
+                _ctx.Proyecto.Add(proyecto);
+                _ctx.SaveChanges();
+            }
+        }
+
+        public bool ModificarProyecto(Proyecto proyecto)
+        {
+            Proyecto proyectoDB = FindProyectoByID(proyecto.Idproyecto);
+
+            if (proyectoDB != null)
+            {
+                _ctx.Proyecto.Update(proyecto);
+                return true;
+            }
+
+            return false;
         }
 
         public void EliminarProyecto(int IdProyecto)

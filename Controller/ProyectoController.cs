@@ -67,13 +67,7 @@ namespace BackendGestionProyectosLiquidaciones.Controller
         [Authorize]
         public IActionResult CrearProyecto([FromBody] Proyecto proyecto)
         {
-            bool respuesta = _proyectoService.CrearProyecto(proyecto);
-
-            if (!respuesta)
-            {
-                return NotFound("No se pudo crear el proyecto");
-            }
-
+            _proyectoService.CrearProyecto(proyecto);
             return Ok("Proyecto creado correctamente");
         }
 
@@ -83,12 +77,12 @@ namespace BackendGestionProyectosLiquidaciones.Controller
         {
             bool respuesta = _proyectoService.ModificarProyecto(proyecto);
 
-            if (!respuesta)
+            if (respuesta)
             {
-                return BadRequest("No se pudo modificar el proyecto");
+                return Ok("Proyecto modificado correctamente");
             }
 
-            return Ok("Proyecto modificado correctamente");
+            return BadRequest("No se pudo modificar el proyecto");
         }
 
         [HttpDelete("{IdProyecto}")]

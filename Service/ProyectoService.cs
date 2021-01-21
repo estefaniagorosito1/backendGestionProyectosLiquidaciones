@@ -9,7 +9,7 @@ namespace BackendGestionProyectosLiquidaciones.Service
 {
     public interface IProyectoService
     {
-        bool CrearProyecto(Proyecto proyecto);
+        void CrearProyecto(Proyecto proyecto);
 
         bool ModificarProyecto(Proyecto proyecto);
 
@@ -31,15 +31,14 @@ namespace BackendGestionProyectosLiquidaciones.Service
             this._proyectoDao = proyectoDao;
         }
 
-
-        public bool CrearProyecto(Proyecto proyecto)
+        public void CrearProyecto(Proyecto proyecto)
         {
-            return _proyectoDao.Guardar(proyecto);
+            _proyectoDao.CrearProyecto(proyecto);
         }
 
         public bool ModificarProyecto(Proyecto proyecto)
         {
-            return _proyectoDao.Guardar(proyecto);
+            return _proyectoDao.ModificarProyecto(proyecto);
         }
 
         public void EliminarProyecto(int IdProyecto)
@@ -49,17 +48,17 @@ namespace BackendGestionProyectosLiquidaciones.Service
 
         public List<Proyecto> GetProyectos()
         {
-            return _proyectoDao.GetProyectos();
+            return _proyectoDao.FindProyectos();
         }
 
         public List<Proyecto> GetProyectosByCliente(int IdCliente)
         {
-            return _proyectoDao.GetProyectosByCliente(IdCliente);
+            return _proyectoDao.FindProyectosByCliente(IdCliente);
         }
 
         public List<Proyecto> GetProyectosByNombre(string nombre)
         {
-            return _proyectoDao.GetProyectosByNombre(nombre);
+            return _proyectoDao.FindProyectosByNombre(nombre);
         }
 
 
