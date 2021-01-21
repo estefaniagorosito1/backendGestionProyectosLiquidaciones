@@ -22,12 +22,15 @@ namespace BackendGestionProyectosLiquidaciones.Dao
 
         public List<Localidad> GetLocalidades(int IdProvincia, string param)
         {
-            var localidades = from l in _ctx.Localidad
-                              where l.Idprovincia == IdProvincia
-                              && l.Descripcion.ToLower().Contains(param.ToLower())
-                              select l;
+            using (_ctx)
+            {
+                var localidades = from l in _ctx.Localidad
+                                  where l.Idprovincia == IdProvincia
+                                  && l.Descripcion.ToLower().Contains(param.ToLower())
+                                  select l;
 
-            return localidades.ToList();
+                return localidades.ToList();
+            }
         }
     }
 }
