@@ -26,6 +26,10 @@ namespace BackendGestionProyectosLiquidaciones.Dao
 
         private TpSeminarioContext _ctx = new TpSeminarioContext();
 
+        public ProyectoDao(TpSeminarioContext ctx)
+        {
+            _ctx = ctx;
+        }
 
         public List<Proyecto> GetProyectos()
         {

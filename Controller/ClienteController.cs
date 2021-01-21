@@ -22,7 +22,7 @@ namespace BackendGestionProyectosLiquidaciones.Controller
         }
 
         [HttpGet]
-        //[Authorize(Roles = "Usuario")]
+        [Authorize]
         public IActionResult FindClientes()
         {
             var clientes = _clienteService.FindClientes();
@@ -36,7 +36,7 @@ namespace BackendGestionProyectosLiquidaciones.Controller
         }
 
         [HttpGet("{param}")]
-        //[Authorize(Roles = "Usuario")]
+        [Authorize]
         public IActionResult FindClientesByNombreApellido([FromRoute] string param)
         {
             var clientes = _clienteService.FindClienteByNombreApellido(param);
@@ -50,7 +50,7 @@ namespace BackendGestionProyectosLiquidaciones.Controller
         }
 
         [HttpPost]
-        //[Authorize(Roles = "Usuario")]
+        [Authorize]
         public IActionResult CrearCliente([FromBody] Cliente cliente)
         {
             _clienteService.CrearCliente(cliente);
@@ -58,7 +58,7 @@ namespace BackendGestionProyectosLiquidaciones.Controller
         }
 
         [HttpPut]
-        //[Authorize(Roles = "Usuario")]
+        [Authorize]
         public IActionResult ModificarCliente(Cliente cliente)
         {
             var respuesta = _clienteService.ModificarCliente(cliente);
@@ -72,7 +72,7 @@ namespace BackendGestionProyectosLiquidaciones.Controller
         }
 
         [HttpDelete("{IdCliente}")]
-        //[Authorize (Roles = "Usuario")]
+        [Authorize]
         public IActionResult EliminarCliente([FromRoute] int IdCliente)
         {
             var respuesta = _clienteService.EliminarCliente(IdCliente);

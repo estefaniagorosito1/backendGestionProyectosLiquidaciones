@@ -24,6 +24,11 @@ namespace BackendGestionProyectosLiquidaciones.Dao
     {
         private TpSeminarioContext _ctx = new TpSeminarioContext();
 
+        public UsuarioDao(TpSeminarioContext ctx)
+        {
+            _ctx = ctx;
+        }
+
         public Usuario FindUsuario(Usuario usuario)
         {
             using (_ctx)

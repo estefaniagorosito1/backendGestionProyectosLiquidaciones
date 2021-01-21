@@ -22,7 +22,7 @@ namespace BackendGestionProyectosLiquidaciones.Controller
         }
 
         [HttpGet]
-        //[Authorize(Roles = "Usuario")]
+        [Authorize]
         public IActionResult GetProyectos()
         {
             var proyectos = _proyectoService.GetProyectos();
@@ -36,7 +36,7 @@ namespace BackendGestionProyectosLiquidaciones.Controller
         }
 
         [HttpGet("/cliente/{idcliente}")]
-        //[Authorize(Roles = "Usuario")]
+        [Authorize]
         public IActionResult GetProyectosByCliente([FromRoute] int IdCliente)
         {
             var proyectosCliente = _proyectoService.GetProyectosByCliente(IdCliente);
@@ -50,7 +50,7 @@ namespace BackendGestionProyectosLiquidaciones.Controller
         }
 
         [HttpGet("/bynombre/{nombre}")]
-        //[Authorize(Roles = "Usuario")]
+        [Authorize]
         public IActionResult GetProyectosByNombre([FromRoute] string nombre)
         {
             var proyectos = _proyectoService.GetProyectosByNombre(nombre);
@@ -64,7 +64,7 @@ namespace BackendGestionProyectosLiquidaciones.Controller
         }
 
         [HttpPost]
-        //[Authorize(Roles = "Usuario")]
+        [Authorize]
         public IActionResult CrearProyecto([FromBody] Proyecto proyecto)
         {
             bool respuesta = _proyectoService.CrearProyecto(proyecto);
@@ -78,7 +78,7 @@ namespace BackendGestionProyectosLiquidaciones.Controller
         }
 
         [HttpPut]
-        //[Authorize(Roles = "Usuario")]
+        [Authorize]
         public IActionResult ModificarProyecto([FromBody] Proyecto proyecto)
         {
             bool respuesta = _proyectoService.ModificarProyecto(proyecto);
@@ -92,7 +92,7 @@ namespace BackendGestionProyectosLiquidaciones.Controller
         }
 
         [HttpDelete("{IdProyecto}")]
-        //[Authorize(Roles = "Usuario")]
+        [Authorize]
         public IActionResult EliminarProyecto([FromRoute] int IdProyecto)
         {
             _proyectoService.EliminarProyecto(IdProyecto);
