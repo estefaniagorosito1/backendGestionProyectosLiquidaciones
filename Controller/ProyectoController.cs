@@ -91,7 +91,7 @@ namespace BackendGestionProyectosLiquidaciones.Controller
             return Ok("Proyecto modificado correctamente");
         }
 
-        [HttpDelete("/{IdProyecto}")]
+        [HttpDelete("{IdProyecto}")]
         //[Authorize(Roles = "Usuario")]
         public IActionResult EliminarProyecto([FromRoute] int IdProyecto)
         {
