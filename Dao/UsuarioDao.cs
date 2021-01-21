@@ -22,7 +22,7 @@ namespace BackendGestionProyectosLiquidaciones.Dao
 
     public class UsuarioDao : IUsuarioDao
     {
-        private TpSeminarioContext _ctx = new TpSeminarioContext();
+        private TpSeminarioContext _ctx;
 
         public UsuarioDao(TpSeminarioContext ctx)
         {

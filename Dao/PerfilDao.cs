@@ -14,7 +14,7 @@ namespace BackendGestionProyectosLiquidaciones.Dao
 
     public class PerfilDao : IPerfilDao
     {
-        private TpSeminarioContext _ctx = new TpSeminarioContext();
+        private TpSeminarioContext _ctx;
 
         public PerfilDao(TpSeminarioContext ctx)
         {
