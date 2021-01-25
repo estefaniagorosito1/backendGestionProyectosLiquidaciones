@@ -12,9 +12,9 @@ namespace BackendGestionProyectosLiquidaciones.Dao
 
         Usuario FindUsuarioByID(int IdUsuario);
 
-        bool CrearUsuario(Usuario usuario);
+        void CrearUsuario(Usuario usuario);
 
-        bool ModificarUsuario(Usuario usuario);
+        void ModificarUsuario(Usuario usuario);
 
         void EliminarUsuario(int IdUsuario);
     }
@@ -46,53 +46,34 @@ namespace BackendGestionProyectosLiquidaciones.Dao
             }
         }
 
-        public bool CrearUsuario(Usuario usuario)
+        public void CrearUsuario(Usuario usuario)
         {
             using (_ctx)
             {
-                var user = FindUsuario(usuario);
+                _ctx.Usuario.Add(usuario);
+                _ctx.SaveChanges();
 
-                if (user == null)
-                {
-                    _ctx.Usuario.Add(usuario);
-                    _ctx.SaveChanges();
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
             }
-
         }
 
-        public bool ModificarUsuario(Usuario usuario)
+        public void ModificarUsuario(Usuario usuario)
         {
             using (_ctx)
             {
-                var user = _ctx.Usuario.First(us => us.Idusuario == usuario.Idusuario);
-                if (user != null)
-                {
-                    _ctx.Update(usuario);
-                    _ctx.SaveChanges();
-                    return true;
-                }
-
-                return false;
-
+                _ctx.Update(usuario);
+                _ctx.SaveChanges();
             }
         }
 
         public void EliminarUsuario(int IdUsuario)
         {
-            using(_ctx)
+            using (_ctx)
             {
-                var user = _ctx.Usuario.FirstOrDefault(u => u.Idusuario == IdUsuario);
+                var user = FindUsuarioByID(IdUsuario);
                 _ctx.Usuario.Remove(user);
                 _ctx.SaveChanges();
             }
         }
-
 
     }
 }

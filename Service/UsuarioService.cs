@@ -43,12 +43,27 @@ namespace BackendGestionProyectosLiquidaciones.Service
 
         public bool CrearUsuario(Usuario usuario)
         {
-            return _usuarioDao.CrearUsuario(usuario);
+            var user = _usuarioDao.FindUsuarioByID(usuario.Idusuario);
+
+            if (user == null)
+            {
+                _usuarioDao.CrearUsuario(usuario);
+                return true;
+            }
+
+            return false;
         }
 
         public bool ModificarUsuario(Usuario usuario)
         {
-            return _usuarioDao.ModificarUsuario(usuario);
+            var user = _usuarioDao.FindUsuarioByID(usuario.Idusuario);
+            if (user != null)
+            {
+                _usuarioDao.ModificarUsuario(usuario);
+                return true;
+            }
+
+            return false;
         }
 
         public void EliminarUsuario(int IdUsuario)
