@@ -46,7 +46,16 @@ namespace BackendGestionProyectosLiquidaciones.Service
 
         public bool ModificarEmpleado(Empleado empleado)
         {
-            return _empleadoDao.ModificarEmpleado(empleado);
+            var empleadoDB = _empleadoDao.FindEmpleadoByID(empleado.Idempleado);
+
+            if (empleadoDB != null)
+            {
+                _empleadoDao.ModificarEmpleado(empleado);
+                return true;
+            }
+
+            return false;
+            
         }
 
         public void EliminarEmpleado(int IdEmpleado)

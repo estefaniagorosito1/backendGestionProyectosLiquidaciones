@@ -16,7 +16,7 @@ namespace BackendGestionProyectosLiquidaciones.Dao
 
         void CrearEmpleado(Empleado empleado);
 
-        bool ModificarEmpleado(Empleado empleado);
+        void ModificarEmpleado(Empleado empleado);
 
         void EliminarEmpleado(Empleado empleado);
     }
@@ -73,21 +73,15 @@ namespace BackendGestionProyectosLiquidaciones.Dao
             }
         }
 
-        public bool ModificarEmpleado(Empleado empleado)
+        public void ModificarEmpleado(Empleado empleado)
         {
             using (_ctx)
             {
-                var empleadoDB = FindEmpleadoByID(empleado.Idempleado);
+                _ctx.Empleado.Update(empleado);
+                _ctx.SaveChanges();
 
-                if (empleadoDB != null)
-                {
-                    _ctx.Empleado.Update(empleado);
-                    _ctx.SaveChanges();
-                    return true;
-                }
-
-                return false;
             }
+
         }
 
         public void EliminarEmpleado(Empleado empleado)
