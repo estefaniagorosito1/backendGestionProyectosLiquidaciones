@@ -20,7 +20,7 @@ namespace BackendGestionProyectosLiquidaciones.Controller
     public class LoginController : ControllerBase
     {
         private UsuarioService _usuarioService;
-        private readonly string signkey = "THIS IS USED TO SIGN AND VERIFY JWT TOKENS";
+        private readonly Settings _settings;
 
         public LoginController(UsuarioService usuarioService)
         {
@@ -31,7 +31,7 @@ namespace BackendGestionProyectosLiquidaciones.Controller
         [AllowAnonymous]
         public IActionResult authenticate([FromBody] Usuario usuario)
         {
-
+            var signkey = _settings.Secret;
             Usuario user = _usuarioService.FindUsuario(usuario);
 
             if(user == null)
@@ -45,7 +45,7 @@ namespace BackendGestionProyectosLiquidaciones.Controller
             {
                 Subject = new ClaimsIdentity(new Claim[]
                 {
-                    new Claim(ClaimTypes.Name, user.NombreUsuario),
+                    new Claim(ClaimTypes.Name, user.Idusuario.ToString()),
                     new Claim(ClaimTypes.Role, user.IdrolNavigation.DescripcionRol),
                 }),
                 Expires = DateTime.UtcNow.AddDays(1),
