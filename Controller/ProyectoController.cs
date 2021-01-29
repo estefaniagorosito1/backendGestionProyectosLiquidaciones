@@ -25,7 +25,7 @@ namespace BackendGestionProyectosLiquidaciones.Controller
         [Authorize]
         public IActionResult GetProyectos()
         {
-            var proyectos = _proyectoService.GetProyectos();
+            var proyectos = _proyectoService.FindProyectos();
 
             if (proyectos.Count == 0)
             {
@@ -39,7 +39,7 @@ namespace BackendGestionProyectosLiquidaciones.Controller
         [Authorize]
         public IActionResult GetProyectosByCliente([FromRoute] int IdCliente)
         {
-            var proyectosCliente = _proyectoService.GetProyectosByCliente(IdCliente);
+            var proyectosCliente = _proyectoService.FindProyectosByCliente(IdCliente);
 
             if (proyectosCliente.Count == 0)
             {
@@ -53,7 +53,7 @@ namespace BackendGestionProyectosLiquidaciones.Controller
         [Authorize]
         public IActionResult GetProyectosByNombre([FromRoute] string nombre)
         {
-            var proyectos = _proyectoService.GetProyectosByNombre(nombre);
+            var proyectos = _proyectoService.FindProyectosByNombre(nombre);
 
             if (proyectos.Count == 0)
             {

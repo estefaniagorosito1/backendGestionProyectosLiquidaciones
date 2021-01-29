@@ -1,5 +1,4 @@
-﻿using BackendGestionProyectosLiquidaciones.Dao;
-using BackendGestionProyectosLiquidaciones.Model;
+﻿using BackendGestionProyectosLiquidaciones.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;

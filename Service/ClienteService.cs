@@ -1,5 +1,4 @@
-﻿using BackendGestionProyectosLiquidaciones.Dao;
-using BackendGestionProyectosLiquidaciones.Model;
+﻿using BackendGestionProyectosLiquidaciones.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +12,7 @@ namespace BackendGestionProyectosLiquidaciones.Service
 
         List<Cliente> FindClienteByNombreApellido(string param);
 
-        public Cliente FindCliente(int IdCliente);
+        Cliente FindCliente(int IdCliente);
 
         void CrearCliente(Cliente cliente);
 
