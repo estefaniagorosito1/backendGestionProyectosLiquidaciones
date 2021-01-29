@@ -14,9 +14,9 @@ namespace BackendGestionProyectosLiquidaciones.Controller
     [Route("controller")]
     public class TareaController : ControllerBase
     {
-        private TareaService _tareaService;
+        private ITareaService _tareaService;
 
-        public TareaController(TareaService tareaService)
+        public TareaController(ITareaService tareaService)
         {
             _tareaService = tareaService;
         }

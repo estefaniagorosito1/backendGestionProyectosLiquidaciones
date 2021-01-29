@@ -14,9 +14,9 @@ namespace BackendGestionProyectosLiquidaciones.Controller
     [Route("[controller]")]
     public class EmpleadoController : ControllerBase
     {
-        private EmpleadoService _empleadoService;
+        private IEmpleadoService _empleadoService;
 
-        public EmpleadoController(EmpleadoService empleadoService)
+        public EmpleadoController(IEmpleadoService empleadoService)
         {
             _empleadoService = empleadoService;
         }

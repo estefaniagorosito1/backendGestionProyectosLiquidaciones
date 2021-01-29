@@ -14,9 +14,9 @@ namespace BackendGestionProyectosLiquidaciones.Controller
     [Route("controller")]
     public class LocalidadController : ControllerBase
     {
-        private LocalidadService _localidadService;
+        private ILocalidadService _localidadService;
 
-        public LocalidadController(LocalidadService localidadService)
+        public LocalidadController(ILocalidadService localidadService)
         {
             _localidadService = localidadService;
         }

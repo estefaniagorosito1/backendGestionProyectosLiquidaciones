@@ -14,9 +14,9 @@ namespace BackendGestionProyectosLiquidaciones.Controller
     [Route("controller")]
     public class ClienteController : ControllerBase
     {
-        private ClienteService _clienteService;
+        private IClienteService _clienteService;
 
-        public ClienteController(ClienteService clienteService)
+        public ClienteController(IClienteService clienteService)
         {
             _clienteService = clienteService;
         }

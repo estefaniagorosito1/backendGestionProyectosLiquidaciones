@@ -14,9 +14,9 @@ namespace BackendGestionProyectosLiquidaciones.Controller
     [Route("controller")]
     public class ProvinciaController : ControllerBase
     {
-        private ProvinciaService _provinciaService;
+        private IProvinciaService _provinciaService;
 
-        public ProvinciaController(ProvinciaService provinciaService)
+        public ProvinciaController(IProvinciaService provinciaService)
         {
             _provinciaService = provinciaService;
         }

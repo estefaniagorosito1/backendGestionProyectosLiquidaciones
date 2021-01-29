@@ -13,9 +13,9 @@ namespace BackendGestionProyectosLiquidaciones.Controller
     [Route("controller")]
     public class PerfilController : ControllerBase
     {
-        private PerfilService _perfilService;
+        private IPerfilService _perfilService;
 
-        public PerfilController(PerfilService perfilService)
+        public PerfilController(IPerfilService perfilService)
         {
             _perfilService = perfilService;
         }

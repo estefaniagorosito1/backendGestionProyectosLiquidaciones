@@ -13,9 +13,9 @@ namespace BackendGestionProyectosLiquidaciones.Controller
     [Route("controller")]
     public class HoraTrabajadaController : ControllerBase
     {
-        private HoraTrabajadaService _horaTrabajadaService;
+        private IHoraTrabajadaService _horaTrabajadaService;
 
-        public HoraTrabajadaController(HoraTrabajadaService horaTrabajadaService)
+        public HoraTrabajadaController(IHoraTrabajadaService horaTrabajadaService)
         {
             _horaTrabajadaService = horaTrabajadaService;
         }
