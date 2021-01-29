@@ -14,16 +14,19 @@ namespace BackendGestionProyectosLiquidaciones.Service
 
     public class PerfilService : IPerfilService
     {
-        private PerfilDao _perfilDao;
+        private TpSeminarioContext _ctx;
 
-        public PerfilService(PerfilDao perfilDao)
+        public PerfilService(TpSeminarioContext ctx)
         {
-            _perfilDao = perfilDao;
+            _ctx = ctx;
         }
 
         public List<Perfil> FindPerfiles()
         {
-            return _perfilDao.FindPerfiles();
+            using (_ctx)
+            {
+                return _ctx.Perfil.ToList();
+            }
         }
     }
 }

@@ -14,16 +14,24 @@ namespace BackendGestionProyectosLiquidaciones.Service
 
     public class LocalidadService : ILocalidadService
     {
-        private LocalidadDao _localidadDao;
+        private TpSeminarioContext _ctx;
 
-        public LocalidadService(LocalidadDao localidadDao)
+        public LocalidadService(TpSeminarioContext ctx)
         {
-            _localidadDao = localidadDao;
+            _ctx = ctx;
         }
 
         public List<Localidad> GetLocalidades(int IdProvincia, string param)
         {
-            return _localidadDao.GetLocalidades(IdProvincia, param);
+            using (_ctx)
+            {
+                var localidades = from l in _ctx.Localidad
+                                  where l.Idprovincia == IdProvincia
+                                  && l.Descripcion.ToLower().Contains(param.ToLower())
+                                  select l;
+
+                return localidades.ToList();
+            }
         }
     }
 }

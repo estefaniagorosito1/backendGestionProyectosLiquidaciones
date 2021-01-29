@@ -15,52 +15,97 @@ namespace BackendGestionProyectosLiquidaciones.Service
 
         void EliminarProyecto(int IdProyecto);
 
-        List<Proyecto> GetProyectos();
+        List<Proyecto> FindProyectos();
 
-        List<Proyecto> GetProyectosByCliente(int IdCliente);
+        List<Proyecto> FindProyectosByCliente(int IdCliente);
 
-        List<Proyecto> GetProyectosByNombre(string nombre);
+        List<Proyecto> FindProyectosByNombre(string nombre);
     }
 
     public class ProyectoService : IProyectoService
     {
-        private ProyectoDao _proyectoDao;
+        private TpSeminarioContext _ctx;
 
-        public ProyectoService(ProyectoDao proyectoDao)
+        public ProyectoService(TpSeminarioContext ctx)
         {
-            this._proyectoDao = proyectoDao;
+            _ctx = ctx;
+        }
+
+        public List<Proyecto> FindProyectos()
+        {
+            using (_ctx)
+            {
+                return _ctx.Proyecto.ToList();
+
+            }
+        }
+
+        public List<Proyecto> FindProyectosByCliente(int IdCliente)
+        {
+            using (_ctx)
+            {
+                List<Proyecto> proyectos = _ctx.Proyecto
+                                           .Where(p => p.Idcliente == IdCliente)
+                                           .ToList();
+
+                return proyectos;
+            }
+        }
+
+        public List<Proyecto> FindProyectosByNombre(string nombre)
+        {
+            using (_ctx)
+            {
+                List<Proyecto> proyectos = _ctx.Proyecto
+                                           .Where(p => p.NombreProyecto.ToLower().Contains(nombre.ToLower()))
+                                           .ToList();
+                return proyectos;
+            }
+        }
+
+        public Proyecto FindProyectoByID(int IdProyecto)
+        {
+            using (_ctx)
+            {
+                var proyecto = _ctx.Proyecto
+                                   .Where(p => p.Idproyecto.Equals(IdProyecto))
+                                   .FirstOrDefault();
+
+                return proyecto;
+            }
         }
 
         public void CrearProyecto(Proyecto proyecto)
         {
-            _proyectoDao.CrearProyecto(proyecto);
+            using (_ctx)
+            {
+                _ctx.Proyecto.Add(proyecto);
+                _ctx.SaveChanges();
+            }
         }
 
         public bool ModificarProyecto(Proyecto proyecto)
         {
-            return _proyectoDao.ModificarProyecto(proyecto);
+            Proyecto proyectoDB = FindProyectoByID(proyecto.Idproyecto);
+
+            if (proyectoDB != null)
+            {
+                _ctx.Proyecto.Update(proyecto);
+                return true;
+            }
+
+            return false;
         }
 
         public void EliminarProyecto(int IdProyecto)
         {
-            _proyectoDao.EliminarProyecto(IdProyecto);
+            using (_ctx)
+            {
+                Proyecto proyecto = _ctx.Proyecto.FirstOrDefault(p => p.Idproyecto.Equals(IdProyecto));
+                _ctx.Proyecto.Remove(proyecto);
+                _ctx.SaveChanges();
+            }
         }
-
-        public List<Proyecto> GetProyectos()
-        {
-            return _proyectoDao.FindProyectos();
-        }
-
-        public List<Proyecto> GetProyectosByCliente(int IdCliente)
-        {
-            return _proyectoDao.FindProyectosByCliente(IdCliente);
-        }
-
-        public List<Proyecto> GetProyectosByNombre(string nombre)
-        {
-            return _proyectoDao.FindProyectosByNombre(nombre);
-        }
-
 
     }
 }

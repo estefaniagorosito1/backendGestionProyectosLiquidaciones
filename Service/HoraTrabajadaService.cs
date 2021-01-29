@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BackendGestionProyectosLiquidaciones.Dao;
+using BackendGestionProyectosLiquidaciones.Model;
 
 namespace BackendGestionProyectosLiquidaciones.Service
 {
@@ -16,21 +17,34 @@ namespace BackendGestionProyectosLiquidaciones.Service
 
     public class HoraTrabajadaService : IHoraTrabajadaService
     {
-        private HoraTrabajadaDao _horaTrabajadaDao;
+        private TpSeminarioContext _ctx;
 
-        public HoraTrabajadaService(HoraTrabajadaDao horaTrabajadaDao)
+        public HoraTrabajadaService(TpSeminarioContext ctx)
         {
-            _horaTrabajadaDao = horaTrabajadaDao;
+            _ctx = ctx;
         }
 
         public int GetCantHorasTrabajadasEmpleado(int IdEmpleado, DateTime fechaInicio, DateTime fechaFin)
         {
-            return _horaTrabajadaDao.GetCantHorasTrabajadasEmpleado(IdEmpleado, fechaInicio, fechaFin);
+            using (_ctx)
+            {
+                var horas = _ctx.HoraTrabajada.Where(ht => ht.Idempleado == IdEmpleado
+                                                           && fechaInicio < ht.FechaHoraTrabajada
+                                                           && ht.FechaHoraTrabajada < fechaFin);
+
+                return horas.Sum(x => x.CantidadHoraTrabajada);
+            }
         }
 
         public int GetCantHorasTrabajadasProyectoPerfil(int IdProyecto, int IdPerfil)
         {
-            return _horaTrabajadaDao.GetCantHorasTrabajadasProyectoPerfil(IdProyecto, IdPerfil);
+            using (_ctx)
+            {
+                var horas = _ctx.HoraTrabajada.Where(ht => ht.Idproyecto == IdProyecto
+                                                           && ht.Idperfil == IdPerfil);
+
+                return horas.Sum(x => x.CantidadHoraTrabajada);
+            }
         }
     }
 }

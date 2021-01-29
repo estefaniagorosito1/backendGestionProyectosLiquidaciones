@@ -14,16 +14,20 @@ namespace BackendGestionProyectosLiquidaciones.Service
 
     public class ProvinciaService : IProvinciaService
     {
-        private ProvinciaDao _provinciaDao;
+        private TpSeminarioContext _ctx;
 
-        public ProvinciaService(ProvinciaDao provinciaDao)
+        public ProvinciaService(TpSeminarioContext ctx)
         {
-            _provinciaDao = provinciaDao;
+            _ctx = ctx;
         }
 
         public List<Provincia> GetProvincias()
         {
-            return _provinciaDao.GetProvincias();
+            using (_ctx)
+            {
+                return _ctx.Provincia.ToList();
+            }
+
         }
     }
 }

@@ -13,6 +13,8 @@ namespace BackendGestionProyectosLiquidaciones.Service
 
         List<Cliente> FindClienteByNombreApellido(string param);
 
+        public Cliente FindCliente(int IdCliente);
+
         void CrearCliente(Cliente cliente);
 
         bool ModificarCliente(Cliente cliente);
@@ -23,37 +25,68 @@ namespace BackendGestionProyectosLiquidaciones.Service
 
     public class ClienteService : IClienteService
     {
+        private TpSeminarioContext _ctx;
 
-        private ClienteDao _clienteDao;
-
-        public ClienteService(ClienteDao clienteDao)
+        public ClienteService(TpSeminarioContext ctx)
         {
-            _clienteDao = clienteDao;
+            _ctx = ctx;
         }
 
         public List<Cliente> FindClientes()
         {
-            return _clienteDao.FindClientes();
+            using (_ctx)
+            {
+                return _ctx.Cliente.ToList();
+            }
+
         }
 
         public List<Cliente> FindClienteByNombreApellido(string param)
         {
-            return _clienteDao.FindClienteByNombreApellido(param);
+            using (_ctx)
+            {
+                var clientes = from c in _ctx.Cliente
+                               where c.NombreCliente.ToLower().Contains(param.ToLower())
+                                     || c.ApellidoCliente.ToLower().Contains(param.ToLower())
+                               select c;
+
+                return clientes.ToList();
+
+            }
+        }
+
+        public Cliente FindCliente(int IdCliente)
+        {
+            using (_ctx)
+            {
+                var cliente = from c in _ctx.Cliente
+                              where c.Idcliente == IdCliente
+                              select c;
+
+                return cliente.FirstOrDefault();
+            }
         }
 
         public void CrearCliente(Cliente cliente)
         {
-            _clienteDao.CrearCliente(cliente);
+            using (_ctx)
+            {
+                _ctx.Cliente.Add(cliente);
+                _ctx.SaveChanges();
+            }
         }
 
         public bool ModificarCliente(Cliente cliente)
         {
-            Cliente clienteDB = _clienteDao.FindCliente(cliente.Idcliente);
+            Cliente clienteDB = FindCliente(cliente.Idcliente);
 
-            if (clienteDB != null && cliente.Idcliente == clienteDB.Idcliente)
+            if (clienteDB != null)
             {
-                _clienteDao.ModificarCliente(cliente);
-                return true;
+                using (_ctx)
+                {
+                    _ctx.Update(cliente);
+                    return true;
+                }
             }
 
             return false;
@@ -62,15 +95,21 @@ namespace BackendGestionProyectosLiquidaciones.Service
 
         public bool EliminarCliente(int IdCliente)
         {
-            Cliente clienteDB = _clienteDao.FindCliente(IdCliente);
+            Cliente clienteDB = FindCliente(IdCliente);
 
             if (clienteDB != null)
             {
-                _clienteDao.EliminarCliente(clienteDB);
-                return true;
+                using (_ctx)
+                {
+                    _ctx.Cliente.Remove(clienteDB);
+                    _ctx.SaveChanges();
+                    return true;
+                }
+
             }
 
             return false;
+
         }
 
 

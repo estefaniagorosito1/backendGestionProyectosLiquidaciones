@@ -11,6 +11,8 @@ namespace BackendGestionProyectosLiquidaciones.Service
     {
         List<Tarea> FindTareasByProyecto(int IdProyecto);
 
+        Tarea FindTarea(int IdTarea);
+
         void CrearTarea(Tarea tarea);
 
         bool ModificarTarea(Tarea tarea);
@@ -18,30 +20,58 @@ namespace BackendGestionProyectosLiquidaciones.Service
 
     public class TareaService : ITareaService
     {
-        private TareaDao _tareaDao;
+        private TpSeminarioContext _ctx;
 
-        public TareaService(TareaDao tareaDao)
+        public TareaService(TpSeminarioContext ctx)
         {
-            _tareaDao = tareaDao;
+            _ctx = ctx;
         }
 
         public List<Tarea> FindTareasByProyecto(int IdProyecto)
         {
-            return _tareaDao.FindTareasByProyecto(IdProyecto);
+            using (_ctx)
+            {
+                var tareas = from t in _ctx.Tarea
+                             where t.Idproyecto == IdProyecto
+                             select t;
+
+                return tareas.ToList();
+            }
+        }
+
+        public Tarea FindTarea(int IdTarea)
+        {
+            using (_ctx)
+            {
+                var tarea = from t in _ctx.Tarea
+                            where t.Idtarea == IdTarea
+                            select t;
+
+                return tarea.FirstOrDefault();
+            }
         }
 
         public void CrearTarea(Tarea tarea)
         {
-            _tareaDao.CrearTarea(tarea);
+            using (_ctx)
+            {
+                _ctx.Tarea.Add(tarea);
+                _ctx.SaveChanges();
+            }
         }
 
         public bool ModificarTarea(Tarea tarea)
         {
-            var tareaDB = _tareaDao.FindTarea(tarea.Idtarea);
+            var tareaDB = FindTarea(tarea.Idtarea);
 
             if (tareaDB != null)
             {
-                _tareaDao.ModificarTarea(tarea);
+                using (_ctx)
+                {
+                    _ctx.Tarea.Update(tarea);
+                    _ctx.SaveChanges();
+                }
+
                 return true;
             }
 
