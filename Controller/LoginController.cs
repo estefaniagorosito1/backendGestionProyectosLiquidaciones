@@ -11,6 +11,7 @@ using System.Text;
 using System.Security.Claims;
 using Microsoft.IdentityModel.Tokens;
 using BackendGestionProyectosLiquidaciones;
+using Microsoft.Extensions.Options;
 
 namespace BackendGestionProyectosLiquidaciones.Controller
 {
@@ -19,12 +20,20 @@ namespace BackendGestionProyectosLiquidaciones.Controller
     [Route("[controller]")]
     public class LoginController : ControllerBase
     {
-        private UsuarioService _usuarioService;
+        private IUsuarioService _usuarioService;
         private readonly Settings _settings;
 
-        public LoginController(UsuarioService usuarioService)
+        public LoginController(IUsuarioService usuarioService, IOptions<Settings> settings)
         {
             _usuarioService = usuarioService;
+            _settings = settings.Value;
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult Test()
+        {
+            return Ok("Se pudo conectar");
         }
 
         [HttpPost]

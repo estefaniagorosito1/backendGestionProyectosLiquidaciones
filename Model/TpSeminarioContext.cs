@@ -32,13 +32,14 @@ namespace BackendGestionProyectosLiquidaciones.Model
         public virtual DbSet<Tarea> Tarea { get; set; }
         public virtual DbSet<Usuario> Usuario { get; set; }
 
+        /*
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
             {
                 optionsBuilder.UseSqlServer("Server=.\\SQLEXPRESS;Database=TpSeminario;Trusted_Connection=True;");
             }
-        }
+        }*/
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

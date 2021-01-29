@@ -24,30 +24,53 @@ namespace BackendGestionProyectosLiquidaciones.Service
 
     public class UsuarioService : IUsuarioService
     {
-        private UsuarioDao _usuarioDao;
+        private TpSeminarioContext _ctx;
+
+        public UsuarioService(TpSeminarioContext ctx)
+        {
+            _ctx = ctx;
+        }
+
+
+        /*private UsuarioDao _usuarioDao;
 
         public UsuarioService(UsuarioDao usuarioDao)
         {
             _usuarioDao = usuarioDao;
-        }
+        }*/
 
         public Usuario FindUsuario(Usuario usuario)
         {
-            return _usuarioDao.FindUsuario(usuario);
+            using (_ctx)
+            {
+                return _ctx.Usuario.FirstOrDefault(user => user.NombreUsuario == usuario.NombreUsuario
+                                                           & user.PasswordUsuario == usuario.PasswordUsuario);
+            }
+            //return _usuarioDao.FindUsuario(usuario);
         }
 
         public Usuario FindUsuarioById(int IdUsuario)
         {
-            return _usuarioDao.FindUsuarioByID(IdUsuario);
+            using (_ctx)
+            {
+                return _ctx.Usuario.FirstOrDefault(user => user.Idusuario == IdUsuario);
+            }
+            //return _usuarioDao.FindUsuarioByID(IdUsuario);
         }
 
         public bool CrearUsuario(Usuario usuario)
         {
-            var user = _usuarioDao.FindUsuarioByID(usuario.Idusuario);
+            var user = FindUsuarioById(usuario.Idusuario);
 
             if (user == null)
             {
-                _usuarioDao.CrearUsuario(usuario);
+                using (_ctx)
+                {
+                    _ctx.Usuario.Add(usuario);
+                    _ctx.SaveChanges();
+
+                }
+                //_usuarioDao.CrearUsuario(usuario);
                 return true;
             }
 
@@ -56,10 +79,15 @@ namespace BackendGestionProyectosLiquidaciones.Service
 
         public bool ModificarUsuario(Usuario usuario)
         {
-            var user = _usuarioDao.FindUsuarioByID(usuario.Idusuario);
+            var user = FindUsuarioById(usuario.Idusuario);
             if (user != null)
             {
-                _usuarioDao.ModificarUsuario(usuario);
+                using (_ctx)
+                {
+                    _ctx.Update(usuario);
+                    _ctx.SaveChanges();
+                }
+                //_usuarioDao.ModificarUsuario(usuario);
                 return true;
             }
 
@@ -68,7 +96,13 @@ namespace BackendGestionProyectosLiquidaciones.Service
 
         public void EliminarUsuario(int IdUsuario)
         {
-            _usuarioDao.EliminarUsuario(IdUsuario);
+            using (_ctx)
+            {
+                var user = FindUsuarioById(IdUsuario);
+                _ctx.Usuario.Remove(user);
+                _ctx.SaveChanges();
+            }
+            //_usuarioDao.EliminarUsuario(IdUsuario);
         }
     }
 }

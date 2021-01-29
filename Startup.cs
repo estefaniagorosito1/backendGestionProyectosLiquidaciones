@@ -12,9 +12,9 @@ using Microsoft.Extensions.DependencyInjection;
 using BackendGestionProyectosLiquidaciones.Model;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using BackendGestionProyectosLiquidaciones.Service;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using System;
 
 namespace BackendGestionProyectosLiquidaciones
 {
@@ -38,6 +38,7 @@ namespace BackendGestionProyectosLiquidaciones
             });
 
             services.AddCors();
+            services.AddDbContext<TpSeminarioContext>(options => options.UseSqlServer(Configuration.GetConnectionString("TpSeminarioContext")));
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
             // JWT Authentication
@@ -79,6 +80,15 @@ namespace BackendGestionProyectosLiquidaciones
             });
 
             // services.AddAuthorization();
+
+            // Inyeccion de dependencias
+            services.AddScoped<IUsuarioService, UsuarioService>();
+            services.AddScoped<IClienteService, ClienteService>();
+            services.AddScoped<IEmpleadoService, EmpleadoService>();
+            services.AddScoped<ILocalidadService, LocalidadService>();
+            services.AddScoped<IProvinciaService, ProvinciaService>();
+            services.AddScoped<IProyectoService, ProyectoService>();
+            services.AddScoped<IPerfilService, PerfilService>();
 
         }
 
