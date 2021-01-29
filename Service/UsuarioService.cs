@@ -9,7 +9,7 @@ namespace BackendGestionProyectosLiquidaciones.Service
 {
     public interface IUsuarioService
     {
-        Usuario FindUsuario(Usuario usuario);
+        Usuario FindUsuario(string username, string password);
 
         Usuario FindUsuarioById(int IdUsuario);
 
@@ -31,22 +31,14 @@ namespace BackendGestionProyectosLiquidaciones.Service
             _ctx = ctx;
         }
 
-
-        /*private UsuarioDao _usuarioDao;
-
-        public UsuarioService(UsuarioDao usuarioDao)
-        {
-            _usuarioDao = usuarioDao;
-        }*/
-
-        public Usuario FindUsuario(Usuario usuario)
+        public Usuario FindUsuario(string username, string password)
         {
             using (_ctx)
             {
-                return _ctx.Usuario.FirstOrDefault(user => user.NombreUsuario == usuario.NombreUsuario
-                                                           & user.PasswordUsuario == usuario.PasswordUsuario);
+                return _ctx.Usuario.FirstOrDefault(user => user.NombreUsuario == username
+                                                           & user.PasswordUsuario == password);
             }
-            //return _usuarioDao.FindUsuario(usuario);
+
         }
 
         public Usuario FindUsuarioById(int IdUsuario)
@@ -55,7 +47,6 @@ namespace BackendGestionProyectosLiquidaciones.Service
             {
                 return _ctx.Usuario.FirstOrDefault(user => user.Idusuario == IdUsuario);
             }
-            //return _usuarioDao.FindUsuarioByID(IdUsuario);
         }
 
         public bool CrearUsuario(Usuario usuario)
@@ -70,7 +61,7 @@ namespace BackendGestionProyectosLiquidaciones.Service
                     _ctx.SaveChanges();
 
                 }
-                //_usuarioDao.CrearUsuario(usuario);
+
                 return true;
             }
 
@@ -87,7 +78,7 @@ namespace BackendGestionProyectosLiquidaciones.Service
                     _ctx.Update(usuario);
                     _ctx.SaveChanges();
                 }
-                //_usuarioDao.ModificarUsuario(usuario);
+
                 return true;
             }
 
@@ -102,7 +93,7 @@ namespace BackendGestionProyectosLiquidaciones.Service
                 _ctx.Usuario.Remove(user);
                 _ctx.SaveChanges();
             }
-            //_usuarioDao.EliminarUsuario(IdUsuario);
+
         }
     }
 }
