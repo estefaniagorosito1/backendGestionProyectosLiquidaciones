@@ -12,6 +12,8 @@ using System.Security.Claims;
 using Microsoft.IdentityModel.Tokens;
 using BackendGestionProyectosLiquidaciones;
 using Microsoft.Extensions.Options;
+using System.IO;
+using Newtonsoft.Json;
 
 namespace BackendGestionProyectosLiquidaciones.Controller
 {
@@ -29,19 +31,17 @@ namespace BackendGestionProyectosLiquidaciones.Controller
             _settings = settings.Value;
         }
 
-        [HttpGet]
-        [AllowAnonymous]
-        public IActionResult Test()
-        {
-            return Ok("Se pudo conectar");
-        }
-
         [HttpPost]
         [AllowAnonymous]
-        public IActionResult authenticate([FromBody] Usuario usuario)
+        public IActionResult Authenticate()
         {
+            StreamReader sr = new StreamReader(Request.Body);
+            var bodyString = sr.ReadToEnd();
+
+            User body = JsonConvert.DeserializeObject<User>(bodyString);
+
             var signkey = _settings.Secret;
-            Usuario user = _usuarioService.FindUsuario(usuario);
+            Usuario user = _usuarioService.FindUsuario(body.user, body.password);
 
             if(user == null)
             {
@@ -73,6 +73,13 @@ namespace BackendGestionProyectosLiquidaciones.Controller
                 Token = tokenString
             });
         }
+    }
+
+    // Clase usada únicamente en el login para recuperar los parámetros del body
+    public class User
+    {
+        public string user { get; set; }
+        public string password { get; set; }
     }
 
 }
