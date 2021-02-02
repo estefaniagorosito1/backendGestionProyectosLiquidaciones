@@ -37,13 +37,21 @@ namespace BackendGestionProyectosLiquidaciones.Controller
         {
             StreamReader sr = new StreamReader(Request.Body);
             var bodyString = sr.ReadToEnd();
+            User body = new User();
 
-            User body = JsonConvert.DeserializeObject<User>(bodyString);
+            try
+            {
+                body = JsonConvert.DeserializeObject<User>(bodyString);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
 
-            var signkey = _settings.Secret;
             Usuario user = _usuarioService.FindUsuario(body.user, body.password);
+            var signkey = _settings.Secret;
 
-            if(user == null)
+            if (user == null)
             {
                 return BadRequest("Usuario y/o contraseña incorrectos.");
             }
@@ -64,7 +72,8 @@ namespace BackendGestionProyectosLiquidaciones.Controller
             var token = tokenHandler.CreateToken(tokenDescriptor);
             var tokenString = tokenHandler.WriteToken(token);
 
-            return Ok(new {
+            return Ok(new
+            {
                 Idusuario = user.Idusuario,
                 Username = user.NombreUsuario,
                 IdRol = user.Idrol,

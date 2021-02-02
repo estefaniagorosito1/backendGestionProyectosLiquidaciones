@@ -11,7 +11,7 @@ namespace BackendGestionProyectosLiquidaciones.Controller
 {
     [Authorize]
     [ApiController]
-    [Route("controller")]
+    [Route("[controller]")]
     public class ProyectoController : ControllerBase
     {
         private IProyectoService _proyectoService;

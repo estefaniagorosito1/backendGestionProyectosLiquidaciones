@@ -10,7 +10,7 @@ namespace BackendGestionProyectosLiquidaciones.Controller
 {
     [Authorize]
     [ApiController]
-    [Route("controller")]
+    [Route("[controller]")]
     public class PerfilController : ControllerBase
     {
         private IPerfilService _perfilService;

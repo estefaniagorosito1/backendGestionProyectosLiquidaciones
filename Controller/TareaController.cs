@@ -11,7 +11,7 @@ namespace BackendGestionProyectosLiquidaciones.Controller
 {
     [ApiController]
     [Authorize]
-    [Route("controller")]
+    [Route("[controller]")]
     public class TareaController : ControllerBase
     {
         private ITareaService _tareaService;

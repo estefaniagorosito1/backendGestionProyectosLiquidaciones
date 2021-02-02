@@ -10,7 +10,7 @@ namespace BackendGestionProyectosLiquidaciones.Controller
 {
     [ApiController]
     [Authorize]
-    [Route("controller")]
+    [Route("[controller]")]
     public class HoraTrabajadaController : ControllerBase
     {
         private IHoraTrabajadaService _horaTrabajadaService;
