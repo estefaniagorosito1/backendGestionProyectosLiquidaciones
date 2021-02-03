@@ -59,7 +59,7 @@ namespace BackendGestionProyectosLiquidaciones.Controller
 
         [HttpPut]
         [Authorize]
-        public IActionResult ModificarEmpleado(Empleado empleado)
+        public IActionResult ModificarEmpleado([FromBody] Empleado empleado)
         {
             bool respuesta = _empleadoService.ModificarEmpleado(empleado);
 
