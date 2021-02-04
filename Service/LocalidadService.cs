@@ -8,7 +8,7 @@ namespace BackendGestionProyectosLiquidaciones.Service
 {
     public interface ILocalidadService
     {
-        List<Localidad> GetLocalidades(int IdProvincia, string param);
+        List<Localidad> GetLocalidades(int IdProvincia);
     }
 
     public class LocalidadService : ILocalidadService
@@ -20,13 +20,12 @@ namespace BackendGestionProyectosLiquidaciones.Service
             _ctx = ctx;
         }
 
-        public List<Localidad> GetLocalidades(int IdProvincia, string param)
+        public List<Localidad> GetLocalidades(int IdProvincia)
         {
             using (_ctx)
             {
                 var localidades = from l in _ctx.Localidad
                                   where l.Idprovincia == IdProvincia
-                                  && l.Descripcion.ToLower().Contains(param.ToLower())
                                   select l;
 
                 return localidades.ToList();

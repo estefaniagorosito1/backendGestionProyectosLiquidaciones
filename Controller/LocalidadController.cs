@@ -21,11 +21,11 @@ namespace BackendGestionProyectosLiquidaciones.Controller
             _localidadService = localidadService;
         }
 
-        [HttpGet("{IdProvincia}/{param}")]
+        [HttpGet("{IdProvincia}")]
         [Authorize]
-        public IActionResult GetLocalidades([FromRoute] int IdProvincia, [FromRoute] string param)
+        public IActionResult GetLocalidades([FromRoute] int IdProvincia)
         {
-            List<Localidad> localidades = _localidadService.GetLocalidades(IdProvincia, param);
+            List<Localidad> localidades = _localidadService.GetLocalidades(IdProvincia);
             return Ok(localidades);
         }
 
