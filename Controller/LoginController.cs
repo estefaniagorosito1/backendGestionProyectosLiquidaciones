@@ -49,7 +49,7 @@ namespace BackendGestionProyectosLiquidaciones.Controller
             }
 
             Usuario user = _usuarioService.FindUsuario(body.user, body.password);
-            var signkey = _settings.Secret;
+            var signkey = "$3M1N@R10PUN70N3T";
 
             if (user == null)
             {
@@ -60,10 +60,10 @@ namespace BackendGestionProyectosLiquidaciones.Controller
             var key = Encoding.ASCII.GetBytes(signkey);
             var tokenDescriptor = new SecurityTokenDescriptor
             {
-                Subject = new ClaimsIdentity(new Claim[]
+                Subject = new ClaimsIdentity(new []
                 {
                     new Claim(ClaimTypes.Name, user.Idusuario.ToString()),
-                    new Claim(ClaimTypes.Role, user.IdrolNavigation.DescripcionRol),
+                    new Claim(ClaimTypes.Role, user.Idrol.ToString()),
                 }),
                 Expires = DateTime.UtcNow.AddDays(1),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)

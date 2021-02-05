@@ -73,7 +73,7 @@ namespace BackendGestionProyectosLiquidaciones.Service
 
         public bool ModificarEmpleado(Empleado empleado)
         {
-            var empleadoDB = FindEmpleadoByID(empleado.Idempleado);
+            var empleadoDB = FindEmpleadoByID((int)empleado.Idempleado);
 
             if (empleadoDB != null)
             {

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BackendGestionProyectosLiquidaciones.Model;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace BackendGestionProyectosLiquidaciones.Service
 {
@@ -24,27 +25,30 @@ namespace BackendGestionProyectosLiquidaciones.Service
     public class UsuarioService : IUsuarioService
     {
         private TpSeminarioContext _ctx;
+        public IServiceScopeFactory _scopeFactory;
 
-        public UsuarioService(TpSeminarioContext ctx)
+        public UsuarioService(IServiceScopeFactory scopeFactory)
         {
-            _ctx = ctx;
+            _scopeFactory = scopeFactory;
         }
 
         public Usuario FindUsuario(string username, string password)
         {
-            using (_ctx)
+            using (var scope = _scopeFactory.CreateScope())
             {
-                return _ctx.Usuario.FirstOrDefault(user => user.NombreUsuario == username
-                                                           & user.PasswordUsuario == password);
-            }
+                var dbContext = scope.ServiceProvider.GetRequiredService<TpSeminarioContext>();
 
+                return dbContext.Usuario.FirstOrDefault(user => user.NombreUsuario == username
+                                           & user.PasswordUsuario == password);
+            }
         }
 
         public Usuario FindUsuarioById(int IdUsuario)
         {
-            using (_ctx)
+            using (var scope = _scopeFactory.CreateScope())
             {
-                return _ctx.Usuario.FirstOrDefault(user => user.Idusuario == IdUsuario);
+                var dbContext = scope.ServiceProvider.GetRequiredService<TpSeminarioContext>();
+                return dbContext.Usuario.FirstOrDefault(user => user.Idusuario == IdUsuario);
             }
         }
 
@@ -54,11 +58,12 @@ namespace BackendGestionProyectosLiquidaciones.Service
 
             if (user == null)
             {
-                using (_ctx)
-                {
-                    _ctx.Usuario.Add(usuario);
-                    _ctx.SaveChanges();
 
+                using (var scope = _scopeFactory.CreateScope())
+                {
+                    var dbContext = scope.ServiceProvider.GetRequiredService<TpSeminarioContext>();
+                    dbContext.Usuario.Add(usuario);
+                    dbContext.SaveChanges();
                 }
 
                 return true;
@@ -72,10 +77,12 @@ namespace BackendGestionProyectosLiquidaciones.Service
             var user = FindUsuarioById(usuario.Idusuario);
             if (user != null)
             {
-                using (_ctx)
+
+                using (var scope = _scopeFactory.CreateScope())
                 {
-                    _ctx.Update(usuario);
-                    _ctx.SaveChanges();
+                    var dbContext = scope.ServiceProvider.GetRequiredService<TpSeminarioContext>();
+                    dbContext.Update(usuario);
+                    dbContext.SaveChanges();
                 }
 
                 return true;
@@ -86,11 +93,13 @@ namespace BackendGestionProyectosLiquidaciones.Service
 
         public void EliminarUsuario(int IdUsuario)
         {
-            using (_ctx)
-            {
                 var user = FindUsuarioById(IdUsuario);
-                _ctx.Usuario.Remove(user);
-                _ctx.SaveChanges();
+
+            using (var scope = _scopeFactory.CreateScope())
+            {
+                var dbContext = scope.ServiceProvider.GetRequiredService<TpSeminarioContext>();
+                dbContext.Usuario.Remove(user);
+                dbContext.SaveChanges();
             }
 
         }

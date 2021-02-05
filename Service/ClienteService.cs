@@ -1,7 +1,9 @@
 ﻿using BackendGestionProyectosLiquidaciones.Model;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace BackendGestionProyectosLiquidaciones.Service
@@ -25,67 +27,78 @@ namespace BackendGestionProyectosLiquidaciones.Service
     public class ClienteService : IClienteService
     {
         private TpSeminarioContext _ctx;
+        public IServiceScopeFactory _scopeFactory;
 
-        public ClienteService(TpSeminarioContext ctx)
-        {
-            _ctx = ctx;
+        public ClienteService(IServiceScopeFactory scopeFactory) {
+            _scopeFactory = scopeFactory;
         }
 
         public List<Cliente> FindClientes()
         {
-            using (_ctx)
+            using (var scope = _scopeFactory.CreateScope())
             {
-                return _ctx.Cliente.ToList();
+                var dbContext = scope.ServiceProvider.GetRequiredService<TpSeminarioContext>();
+                return dbContext.Cliente.ToList();
             }
 
         }
 
         public List<Cliente> FindClienteByNombreApellido(string param)
         {
-            using (_ctx)
-            {
                 var clientes = from c in _ctx.Cliente
                                where c.NombreCliente.ToLower().Contains(param.ToLower())
                                      || c.ApellidoCliente.ToLower().Contains(param.ToLower())
                                select c;
 
                 return clientes.ToList();
-
-            }
         }
 
         public Cliente FindCliente(int IdCliente)
         {
-            using (_ctx)
-            {
-                var cliente = from c in _ctx.Cliente
+            using (var scope = _scopeFactory.CreateScope()) {
+                var dbContext = scope.ServiceProvider.GetRequiredService<TpSeminarioContext>();
+
+                var cliente = from c in dbContext.Cliente
                               where c.Idcliente == IdCliente
                               select c;
 
-                return cliente.FirstOrDefault();
+                    return cliente.FirstOrDefault();
             }
         }
 
         public void CrearCliente(Cliente cliente)
         {
-            using (_ctx)
-            {
                 _ctx.Cliente.Add(cliente);
                 _ctx.SaveChanges();
-            }
         }
 
         public bool ModificarCliente(Cliente cliente)
         {
-            Cliente clienteDB = FindCliente(cliente.Idcliente);
+            Cliente clienteDB = FindCliente((int)cliente.Idcliente);
+
+            using (var scope = _scopeFactory.CreateScope())
+            {
+                var dbContext = scope.ServiceProvider.GetRequiredService<TpSeminarioContext>();
+
+                if (clienteDB != null)
+                {
+                    dbContext.Update(cliente);
+                    return true;
+                }
+
+                return false;
+            }
+        }
+
+        public bool EliminarClienteBackup(int IdCliente)
+        {
+            Cliente clienteDB = FindCliente(IdCliente);
 
             if (clienteDB != null)
             {
-                using (_ctx)
-                {
-                    _ctx.Update(cliente);
+                    _ctx.Cliente.Remove(clienteDB);
+                    _ctx.SaveChanges();
                     return true;
-                }
             }
 
             return false;
@@ -94,20 +107,24 @@ namespace BackendGestionProyectosLiquidaciones.Service
 
         public bool EliminarCliente(int IdCliente)
         {
-            Cliente clienteDB = FindCliente(IdCliente);
-
-            if (clienteDB != null)
+            using (var scope = _scopeFactory.CreateScope())
             {
-                using (_ctx)
+                var dbContext = scope.ServiceProvider.GetRequiredService<TpSeminarioContext>();
+
+                var cliente = from c in dbContext.Cliente
+                              where c.Idcliente == IdCliente
+                              select c;
+
+                Cliente clienteDB = cliente.FirstOrDefault();
+
+                if (clienteDB != null)
                 {
-                    _ctx.Cliente.Remove(clienteDB);
-                    _ctx.SaveChanges();
-                    return true;
+                    dbContext.Cliente.Remove(clienteDB);
+                    dbContext.SaveChanges();
+                return true;
                 }
-
-            }
-
             return false;
+            }
 
         }
 

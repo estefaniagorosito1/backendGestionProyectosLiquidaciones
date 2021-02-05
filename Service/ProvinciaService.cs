@@ -1,4 +1,5 @@
 ﻿using BackendGestionProyectosLiquidaciones.Model;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,20 +14,20 @@ namespace BackendGestionProyectosLiquidaciones.Service
 
     public class ProvinciaService : IProvinciaService
     {
-        private TpSeminarioContext _ctx;
+        private IServiceScopeFactory _scopeFactory;
 
-        public ProvinciaService(TpSeminarioContext ctx)
+        public ProvinciaService(IServiceScopeFactory scopeFactory)
         {
-            _ctx = ctx;
+            _scopeFactory = scopeFactory;
         }
 
         public List<Provincia> GetProvincias()
         {
-            using (_ctx)
+            using (var scope = _scopeFactory.CreateScope())
             {
-                return _ctx.Provincia.ToList();
+                var dbContext = scope.ServiceProvider.GetRequiredService<TpSeminarioContext>();
+                return dbContext.Provincia.ToList();
             }
-
         }
     }
 }

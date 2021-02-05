@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace BackendGestionProyectosLiquidaciones.Controller
 {
-    [Authorize]
+   // [Authorize]
     [ApiController]
     [Route("[controller]")]
     public class EmpleadoController : ControllerBase
@@ -50,7 +50,7 @@ namespace BackendGestionProyectosLiquidaciones.Controller
         }
 
         [HttpPost]
-        [Authorize]
+       // [Authorize]
         public IActionResult CrearEmpleado([FromBody] Empleado empleado)
         {
             _empleadoService.CrearEmpleado(empleado);
@@ -58,7 +58,7 @@ namespace BackendGestionProyectosLiquidaciones.Controller
         }
 
         [HttpPut]
-        [Authorize]
+      //  [Authorize]
         public IActionResult ModificarEmpleado([FromBody] Empleado empleado)
         {
             bool respuesta = _empleadoService.ModificarEmpleado(empleado);

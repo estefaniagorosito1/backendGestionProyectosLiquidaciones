@@ -41,6 +41,7 @@ namespace BackendGestionProyectosLiquidaciones
             services.AddDbContext<TpSeminarioContext>(options => options.UseSqlServer(Configuration.GetConnectionString("TpSeminarioContext")));
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
+
             // JWT Authentication
             var appSettings = Configuration.GetSection("AppSettings").Get<Settings>();
             var key = Encoding.ASCII.GetBytes(appSettings.Secret);
@@ -82,13 +83,13 @@ namespace BackendGestionProyectosLiquidaciones
             // services.AddAuthorization();
 
             // Inyeccion de dependencias
-            services.AddScoped<IUsuarioService, UsuarioService>();
-            services.AddScoped<IClienteService, ClienteService>();
-            services.AddScoped<IEmpleadoService, EmpleadoService>();
-            services.AddScoped<ILocalidadService, LocalidadService>();
-            services.AddScoped<IProvinciaService, ProvinciaService>();
-            services.AddScoped<IProyectoService, ProyectoService>();
-            services.AddScoped<IPerfilService, PerfilService>();
+            services.AddSingleton<IUsuarioService, UsuarioService>();
+            services.AddSingleton<IClienteService, ClienteService>();
+            services.AddSingleton<IEmpleadoService, EmpleadoService>();
+            services.AddSingleton<ILocalidadService, LocalidadService>();
+            services.AddSingleton<IProvinciaService, ProvinciaService>();
+            services.AddSingleton<IProyectoService, ProyectoService>();
+            services.AddSingleton<IPerfilService, PerfilService>();
 
         }
 

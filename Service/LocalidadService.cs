@@ -1,4 +1,5 @@
 ﻿using BackendGestionProyectosLiquidaciones.Model;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,18 +14,20 @@ namespace BackendGestionProyectosLiquidaciones.Service
 
     public class LocalidadService : ILocalidadService
     {
-        private TpSeminarioContext _ctx;
+        private IServiceScopeFactory _scopeFactory;
 
-        public LocalidadService(TpSeminarioContext ctx)
+        public LocalidadService(IServiceScopeFactory scopeFactory)
         {
-            _ctx = ctx;
+            _scopeFactory = scopeFactory;
         }
 
         public List<Localidad> GetLocalidades(int IdProvincia)
         {
-            using (_ctx)
+
+            using (var scope = _scopeFactory.CreateScope())
             {
-                var localidades = from l in _ctx.Localidad
+                var dbContext = scope.ServiceProvider.GetRequiredService<TpSeminarioContext>();
+                var localidades = from l in dbContext.Localidad
                                   where l.Idprovincia == IdProvincia
                                   select l;
 

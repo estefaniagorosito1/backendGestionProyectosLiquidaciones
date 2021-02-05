@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace BackendGestionProyectosLiquidaciones.Controller
 {
-    [Authorize]
+   // [Authorize]
     [ApiController]
     [Route("[controller]")]
     public class PerfilController : ControllerBase

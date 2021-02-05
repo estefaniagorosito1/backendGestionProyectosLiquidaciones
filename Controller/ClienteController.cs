@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace BackendGestionProyectosLiquidaciones.Controller
 {
-    [Authorize]
+   // [Authorize]
     [ApiController]
     [Route("[controller]")]
     public class ClienteController : ControllerBase
@@ -22,7 +22,7 @@ namespace BackendGestionProyectosLiquidaciones.Controller
         }
 
         [HttpGet]
-        [Authorize]
+       // [Authorize]
         public IActionResult FindClientes()
         {
             var clientes = _clienteService.FindClientes();
@@ -50,7 +50,7 @@ namespace BackendGestionProyectosLiquidaciones.Controller
         }
 
         [HttpPost]
-        [Authorize]
+       // [Authorize]
         public IActionResult CrearCliente([FromBody] Cliente cliente)
         {
             _clienteService.CrearCliente(cliente);
@@ -58,7 +58,7 @@ namespace BackendGestionProyectosLiquidaciones.Controller
         }
 
         [HttpPut]
-        [Authorize]
+        // [Authorize]
         public IActionResult ModificarCliente(Cliente cliente)
         {
             var respuesta = _clienteService.ModificarCliente(cliente);
