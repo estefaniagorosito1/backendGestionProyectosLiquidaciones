@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BackendGestionProyectosLiquidaciones.Model;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace BackendGestionProyectosLiquidaciones.Service
 {
@@ -16,18 +17,20 @@ namespace BackendGestionProyectosLiquidaciones.Service
 
     public class HoraTrabajadaService : IHoraTrabajadaService
     {
-        private TpSeminarioContext _ctx;
+        public IServiceScopeFactory _scopeFactory;
 
-        public HoraTrabajadaService(TpSeminarioContext ctx)
+        public HoraTrabajadaService(IServiceScopeFactory scopeFactory)
         {
-            _ctx = ctx;
+            _scopeFactory = scopeFactory;
         }
 
         public int GetCantHorasTrabajadasEmpleado(int IdEmpleado, DateTime fechaInicio, DateTime fechaFin)
         {
-            using (_ctx)
+            using (var scope = _scopeFactory.CreateScope())
             {
-                var horas = _ctx.HoraTrabajada.Where(ht => ht.Idempleado == IdEmpleado
+                var dbContext = scope.ServiceProvider.GetRequiredService<TpSeminarioContext>();
+
+                var horas = dbContext.HoraTrabajada.Where(ht => ht.Idempleado == IdEmpleado
                                                            && fechaInicio < ht.FechaHoraTrabajada
                                                            && ht.FechaHoraTrabajada < fechaFin);
 
@@ -37,9 +40,11 @@ namespace BackendGestionProyectosLiquidaciones.Service
 
         public int GetCantHorasTrabajadasProyectoPerfil(int IdProyecto, int IdPerfil)
         {
-            using (_ctx)
+            using (var scope = _scopeFactory.CreateScope())
             {
-                var horas = _ctx.HoraTrabajada.Where(ht => ht.Idproyecto == IdProyecto
+                var dbContext = scope.ServiceProvider.GetRequiredService<TpSeminarioContext>();
+
+                var horas = dbContext.HoraTrabajada.Where(ht => ht.Idproyecto == IdProyecto
                                                            && ht.Idperfil == IdPerfil);
 
                 return horas.Sum(x => x.CantidadHoraTrabajada);

@@ -23,12 +23,11 @@ namespace BackendGestionProyectosLiquidaciones.Controller
     public class LoginController : ControllerBase
     {
         private IUsuarioService _usuarioService;
-        private readonly Settings _settings;
+        private readonly string signkey = "$3M1N@R10PUN70N3T";
 
-        public LoginController(IUsuarioService usuarioService, IOptions<Settings> settings)
+        public LoginController(IUsuarioService usuarioService)
         {
             _usuarioService = usuarioService;
-            _settings = settings.Value;
         }
 
         [HttpPost]
@@ -49,7 +48,7 @@ namespace BackendGestionProyectosLiquidaciones.Controller
             }
 
             Usuario user = _usuarioService.FindUsuario(body.user, body.password);
-            var signkey = "$3M1N@R10PUN70N3T";
+            
 
             if (user == null)
             {

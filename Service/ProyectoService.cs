@@ -1,4 +1,5 @@
 ﻿using BackendGestionProyectosLiquidaciones.Model;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,27 +24,29 @@ namespace BackendGestionProyectosLiquidaciones.Service
 
     public class ProyectoService : IProyectoService
     {
-        private TpSeminarioContext _ctx;
+        public IServiceScopeFactory _scopeFactory;
 
-        public ProyectoService(TpSeminarioContext ctx)
+        public ProyectoService(IServiceScopeFactory scopeFactory)
         {
-            _ctx = ctx;
+            _scopeFactory = scopeFactory;
         }
 
         public List<Proyecto> FindProyectos()
         {
-            using (_ctx)
+            using (var scope = _scopeFactory.CreateScope())
             {
-                return _ctx.Proyecto.ToList();
+                var dbContext = scope.ServiceProvider.GetRequiredService<TpSeminarioContext>();
+                return dbContext.Proyecto.ToList();
 
             }
         }
 
         public List<Proyecto> FindProyectosByCliente(int IdCliente)
         {
-            using (_ctx)
+            using (var scope = _scopeFactory.CreateScope())
             {
-                List<Proyecto> proyectos = _ctx.Proyecto
+                var dbContext = scope.ServiceProvider.GetRequiredService<TpSeminarioContext>();
+                List<Proyecto> proyectos = dbContext.Proyecto
                                            .Where(p => p.Idcliente == IdCliente)
                                            .ToList();
 
@@ -53,9 +56,10 @@ namespace BackendGestionProyectosLiquidaciones.Service
 
         public List<Proyecto> FindProyectosByNombre(string nombre)
         {
-            using (_ctx)
+            using (var scope = _scopeFactory.CreateScope())
             {
-                List<Proyecto> proyectos = _ctx.Proyecto
+                var dbContext = scope.ServiceProvider.GetRequiredService<TpSeminarioContext>();
+                List<Proyecto> proyectos = dbContext.Proyecto
                                            .Where(p => p.NombreProyecto.ToLower().Contains(nombre.ToLower()))
                                            .ToList();
                 return proyectos;
@@ -64,22 +68,21 @@ namespace BackendGestionProyectosLiquidaciones.Service
 
         public Proyecto FindProyectoByID(int IdProyecto)
         {
-            using (_ctx)
+            using (var scope = _scopeFactory.CreateScope())
             {
-                var proyecto = _ctx.Proyecto
-                                   .Where(p => p.Idproyecto.Equals(IdProyecto))
-                                   .FirstOrDefault();
-
+                var dbContext = scope.ServiceProvider.GetRequiredService<TpSeminarioContext>();
+                var proyecto = dbContext.Proyecto.Find(IdProyecto);
                 return proyecto;
             }
         }
 
         public void CrearProyecto(Proyecto proyecto)
         {
-            using (_ctx)
+            using (var scope = _scopeFactory.CreateScope())
             {
-                _ctx.Proyecto.Add(proyecto);
-                _ctx.SaveChanges();
+                var dbContext = scope.ServiceProvider.GetRequiredService<TpSeminarioContext>();
+                dbContext.Proyecto.Add(proyecto);
+                dbContext.SaveChanges();
             }
         }
 
@@ -89,8 +92,13 @@ namespace BackendGestionProyectosLiquidaciones.Service
 
             if (proyectoDB != null)
             {
-                _ctx.Proyecto.Update(proyecto);
-                return true;
+                using (var scope = _scopeFactory.CreateScope())
+                {
+                    var dbContext = scope.ServiceProvider.GetRequiredService<TpSeminarioContext>();
+                    dbContext.Proyecto.Update(proyecto);
+                    dbContext.SaveChanges();
+                    return true;
+                }
             }
 
             return false;
@@ -98,11 +106,13 @@ namespace BackendGestionProyectosLiquidaciones.Service
 
         public void EliminarProyecto(int IdProyecto)
         {
-            using (_ctx)
+            using (var scope = _scopeFactory.CreateScope())
             {
-                Proyecto proyecto = _ctx.Proyecto.FirstOrDefault(p => p.Idproyecto.Equals(IdProyecto));
-                _ctx.Proyecto.Remove(proyecto);
-                _ctx.SaveChanges();
+                var dbContext = scope.ServiceProvider.GetRequiredService<TpSeminarioContext>();
+
+                Proyecto proyecto = dbContext.Proyecto.FirstOrDefault(p => p.Idproyecto.Equals(IdProyecto));
+                dbContext.Proyecto.Remove(proyecto);
+                dbContext.SaveChanges();
             }
         }
 

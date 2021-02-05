@@ -24,7 +24,6 @@ namespace BackendGestionProyectosLiquidaciones.Service
 
     public class UsuarioService : IUsuarioService
     {
-        private TpSeminarioContext _ctx;
         public IServiceScopeFactory _scopeFactory;
 
         public UsuarioService(IServiceScopeFactory scopeFactory)

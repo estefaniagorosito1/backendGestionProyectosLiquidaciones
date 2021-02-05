@@ -1,4 +1,5 @@
 ﻿using BackendGestionProyectosLiquidaciones.Model;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,18 +20,20 @@ namespace BackendGestionProyectosLiquidaciones.Service
 
     public class TareaService : ITareaService
     {
-        private TpSeminarioContext _ctx;
+        public IServiceScopeFactory _scopeFactory;
 
-        public TareaService(TpSeminarioContext ctx)
+        public TareaService(IServiceScopeFactory scopeFactory)
         {
-            _ctx = ctx;
+            _scopeFactory = scopeFactory;
         }
 
         public List<Tarea> FindTareasByProyecto(int IdProyecto)
         {
-            using (_ctx)
+            using (var scope = _scopeFactory.CreateScope())
             {
-                var tareas = from t in _ctx.Tarea
+                var dbContext = scope.ServiceProvider.GetRequiredService<TpSeminarioContext>();
+
+                var tareas = from t in dbContext.Tarea
                              where t.Idproyecto == IdProyecto
                              select t;
 
@@ -40,9 +43,11 @@ namespace BackendGestionProyectosLiquidaciones.Service
 
         public Tarea FindTarea(int IdTarea)
         {
-            using (_ctx)
+            using (var scope = _scopeFactory.CreateScope())
             {
-                var tarea = from t in _ctx.Tarea
+                var dbContext = scope.ServiceProvider.GetRequiredService<TpSeminarioContext>();
+
+                var tarea = from t in dbContext.Tarea
                             where t.Idtarea == IdTarea
                             select t;
 
@@ -52,10 +57,11 @@ namespace BackendGestionProyectosLiquidaciones.Service
 
         public void CrearTarea(Tarea tarea)
         {
-            using (_ctx)
+            using (var scope = _scopeFactory.CreateScope())
             {
-                _ctx.Tarea.Add(tarea);
-                _ctx.SaveChanges();
+                var dbContext = scope.ServiceProvider.GetRequiredService<TpSeminarioContext>();
+                dbContext.Tarea.Add(tarea);
+                dbContext.SaveChanges();
             }
         }
 
@@ -65,10 +71,11 @@ namespace BackendGestionProyectosLiquidaciones.Service
 
             if (tareaDB != null)
             {
-                using (_ctx)
+                using (var scope = _scopeFactory.CreateScope())
                 {
-                    _ctx.Tarea.Update(tarea);
-                    _ctx.SaveChanges();
+                    var dbContext = scope.ServiceProvider.GetRequiredService<TpSeminarioContext>();
+                    dbContext.Tarea.Update(tarea);
+                    dbContext.SaveChanges();
                 }
 
                 return true;
