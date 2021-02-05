@@ -90,14 +90,16 @@ namespace BackendGestionProyectosLiquidaciones.Service
             {
                 var dbContext = scope.ServiceProvider.GetRequiredService<TpSeminarioContext>();
 
-                if (clienteDB != null)
+                if (dbContext.Cliente.Any(c => c.Idcliente == cliente.Idcliente))
                 {
                     dbContext.Update(cliente);
+                    dbContext.SaveChanges();
                     return true;
                 }
 
                 return false;
             }
+
         }
 
         public bool EliminarCliente(int IdCliente)
