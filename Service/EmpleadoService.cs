@@ -1,4 +1,5 @@
 ﻿using BackendGestionProyectosLiquidaciones.Model;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,40 +22,44 @@ namespace BackendGestionProyectosLiquidaciones.Service
 
     public class EmpleadoService : IEmpleadoService
     {
-        private TpSeminarioContext _ctx;
+        private IServiceScopeFactory _scopeFactory;
 
-        public EmpleadoService(TpSeminarioContext ctx)
+        public EmpleadoService(IServiceScopeFactory scopeFactory)
         {
-            _ctx = ctx;
+            _scopeFactory = scopeFactory;
         }
 
         public List<Empleado> FindEmpleados()
         {
-            using (_ctx)
+            using (var scope = _scopeFactory.CreateScope())
             {
-                return _ctx.Empleado.ToList();
+                var dbContext = scope.ServiceProvider.GetRequiredService<TpSeminarioContext>();
+                return dbContext.Empleado.ToList();
             }
         }
 
         public List<Empleado> FindEmpleadosByNombreApellido(string param)
         {
-            using (_ctx)
+            using (var scope = _scopeFactory.CreateScope())
             {
-                var empleados = from e in _ctx.Empleado
+                var dbContext = scope.ServiceProvider.GetRequiredService<TpSeminarioContext>();
+
+                var empleados = from e in dbContext.Empleado
                                 where e.NombreEmpleado.ToLower().Contains(param.ToLower())
                                       || e.ApellidoEmpleado.ToLower().Contains(param.ToLower())
                                 select e;
 
                 return empleados.ToList();
-
             }
         }
 
         public Empleado FindEmpleadoByID(int IdEmpleado)
         {
-            using (_ctx)
+            using (var scope = _scopeFactory.CreateScope())
             {
-                var empleado = from e in _ctx.Empleado
+                var dbContext = scope.ServiceProvider.GetRequiredService<TpSeminarioContext>();
+
+                var empleado = from e in dbContext.Empleado
                                where e.Idempleado == IdEmpleado
                                select e;
 
@@ -64,10 +69,11 @@ namespace BackendGestionProyectosLiquidaciones.Service
 
         public void CrearEmpleado(Empleado empleado)
         {
-            using (_ctx)
+            using (var scope = _scopeFactory.CreateScope())
             {
-                _ctx.Empleado.Add(empleado);
-                _ctx.SaveChanges();
+                var dbContext = scope.ServiceProvider.GetRequiredService<TpSeminarioContext>();
+                dbContext.Empleado.Add(empleado);
+                dbContext.SaveChanges();
             }
         }
 
@@ -75,33 +81,34 @@ namespace BackendGestionProyectosLiquidaciones.Service
         {
             var empleadoDB = FindEmpleadoByID((int)empleado.Idempleado);
 
-            if (empleadoDB != null)
+            using (var scope = _scopeFactory.CreateScope())
             {
-                using (_ctx)
+                var dbContext = scope.ServiceProvider.GetRequiredService<TpSeminarioContext>();
+
+                if (dbContext.Empleado.Any(c => c.Idempleado == empleado.Idempleado))
                 {
-                    _ctx.Empleado.Update(empleado);
-                    _ctx.SaveChanges();
-
+                    dbContext.Update(empleado);
+                    dbContext.SaveChanges();
+                    return true;
                 }
-                return true;
+                return false;
             }
-
-            return false;
-
         }
 
-        public void EliminarEmpleado(int IdEmpleado)
+
+
+    public void EliminarEmpleado(int IdEmpleado)
         {
             Empleado empleado = FindEmpleadoByID(IdEmpleado);
 
             if (empleado != null)
             {
-                using (_ctx)
+                using (var scope = _scopeFactory.CreateScope())
                 {
-                    _ctx.Empleado.Remove(empleado);
-                    _ctx.SaveChanges();
+                    var dbContext = scope.ServiceProvider.GetRequiredService<TpSeminarioContext>();
+                    dbContext.Empleado.Remove(empleado);
+                    dbContext.SaveChanges();
                 }
-
             }
         }
 

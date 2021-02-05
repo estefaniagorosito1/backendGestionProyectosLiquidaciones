@@ -21,7 +21,7 @@ namespace BackendGestionProyectosLiquidaciones.Controller
         }
 
         [HttpGet]
-        [Authorize(Roles = "Usuario")]
+        [Authorize]
         public IActionResult FindPerfiles()
         {
             var perfiles = _perfilService.FindPerfiles();

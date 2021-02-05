@@ -1,4 +1,5 @@
 ﻿using BackendGestionProyectosLiquidaciones.Model;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,18 +14,19 @@ namespace BackendGestionProyectosLiquidaciones.Service
 
     public class PerfilService : IPerfilService
     {
-        private TpSeminarioContext _ctx;
+        private IServiceScopeFactory _scopeFactory;
 
-        public PerfilService(TpSeminarioContext ctx)
+        public PerfilService(IServiceScopeFactory scopeFactory)
         {
-            _ctx = ctx;
+            _scopeFactory = scopeFactory;
         }
 
         public List<Perfil> FindPerfiles()
         {
-            using (_ctx)
+            using (var scope = _scopeFactory.CreateScope())
             {
-                return _ctx.Perfil.ToList();
+                var dbContext = scope.ServiceProvider.GetRequiredService<TpSeminarioContext>();
+                return dbContext.Perfil.ToList();
             }
         }
     }
