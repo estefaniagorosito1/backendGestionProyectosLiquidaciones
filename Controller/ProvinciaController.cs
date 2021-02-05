@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace BackendGestionProyectosLiquidaciones.Controller
 {
-   // [Authorize]
+    [Authorize]
     [ApiController]
     [Route("[controller]")]
     public class ProvinciaController : ControllerBase
@@ -22,7 +22,7 @@ namespace BackendGestionProyectosLiquidaciones.Controller
         }
 
         [HttpGet]
-        // [Authorize]
+        [Authorize]
         public IActionResult GetProvincias()
         {
             List<Provincia> provincias = _provinciaService.GetProvincias();

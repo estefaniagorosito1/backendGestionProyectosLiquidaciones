@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace BackendGestionProyectosLiquidaciones.Controller
 {
-   // [Authorize]
+    [Authorize]
     [ApiController]
     [Route("[controller]")]
     public class PerfilController : ControllerBase
@@ -21,7 +21,7 @@ namespace BackendGestionProyectosLiquidaciones.Controller
         }
 
         [HttpGet]
-        //[Authorize(Roles = "Usuario")]
+        [Authorize(Roles = "Usuario")]
         public IActionResult FindPerfiles()
         {
             var perfiles = _perfilService.FindPerfiles();

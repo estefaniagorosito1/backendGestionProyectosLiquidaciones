@@ -26,7 +26,6 @@ namespace BackendGestionProyectosLiquidaciones.Service
 
     public class ClienteService : IClienteService
     {
-        private TpSeminarioContext _ctx;
         public IServiceScopeFactory _scopeFactory;
 
         public ClienteService(IServiceScopeFactory scopeFactory) {
@@ -45,12 +44,18 @@ namespace BackendGestionProyectosLiquidaciones.Service
 
         public List<Cliente> FindClienteByNombreApellido(string param)
         {
-                var clientes = from c in _ctx.Cliente
+
+            using (var scope = _scopeFactory.CreateScope())
+            {
+                var dbContext = scope.ServiceProvider.GetRequiredService<TpSeminarioContext>();
+
+                var clientes = from c in dbContext.Cliente
                                where c.NombreCliente.ToLower().Contains(param.ToLower())
                                      || c.ApellidoCliente.ToLower().Contains(param.ToLower())
                                select c;
 
                 return clientes.ToList();
+            }
         }
 
         public Cliente FindCliente(int IdCliente)
@@ -68,8 +73,13 @@ namespace BackendGestionProyectosLiquidaciones.Service
 
         public void CrearCliente(Cliente cliente)
         {
-                _ctx.Cliente.Add(cliente);
-                _ctx.SaveChanges();
+            using (var scope = _scopeFactory.CreateScope())
+            {
+                var dbContext = scope.ServiceProvider.GetRequiredService<TpSeminarioContext>();
+
+                dbContext.Cliente.Add(cliente);
+                dbContext.SaveChanges();
+            }
         }
 
         public bool ModificarCliente(Cliente cliente)
@@ -88,21 +98,6 @@ namespace BackendGestionProyectosLiquidaciones.Service
 
                 return false;
             }
-        }
-
-        public bool EliminarClienteBackup(int IdCliente)
-        {
-            Cliente clienteDB = FindCliente(IdCliente);
-
-            if (clienteDB != null)
-            {
-                    _ctx.Cliente.Remove(clienteDB);
-                    _ctx.SaveChanges();
-                    return true;
-            }
-
-            return false;
-
         }
 
         public bool EliminarCliente(int IdCliente)

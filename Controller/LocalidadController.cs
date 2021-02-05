@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace BackendGestionProyectosLiquidaciones.Controller
 {
-   // [Authorize]
+    [Authorize]
     [ApiController]
     [Route("[controller]")]
     public class LocalidadController : ControllerBase
@@ -22,7 +22,7 @@ namespace BackendGestionProyectosLiquidaciones.Controller
         }
 
         [HttpGet("{IdProvincia}")]
-       // [Authorize]
+        [Authorize]
         public IActionResult GetLocalidades([FromRoute] int IdProvincia)
         {
             List<Localidad> localidades = _localidadService.GetLocalidades(IdProvincia);
