@@ -21,7 +21,7 @@ namespace BackendGestionProyectosLiquidaciones.Controller
             _empleadoService = empleadoService;
         }
 
-        [HttpGet("/lista")]
+        [HttpGet]
         [Authorize]
         public IActionResult FindEmpleados()
         {
