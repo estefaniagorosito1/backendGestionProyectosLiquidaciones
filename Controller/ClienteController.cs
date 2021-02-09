@@ -35,18 +35,32 @@ namespace BackendGestionProyectosLiquidaciones.Controller
             return NotFound("No se encontraron clientes");
         }
 
-        [HttpGet("{param}")]
-        [Authorize]
-        public IActionResult FindClientesByNombreApellido([FromRoute] string param)
-        {
-            var clientes = _clienteService.FindClienteByNombreApellido(param);
+       // [HttpGet("{param}")]
+       // [Authorize]
+       // public IActionResult FindClientesByNombreApellido([FromRoute] string param)
+       // {
+       //     var clientes = _clienteService.FindClienteByNombreApellido(param);
 
-            if (clientes.Count != 0)
+       //     if (clientes.Count != 0)
+       //     {
+       //         return Ok(clientes);
+       //     }
+
+       //   return NotFound("No se encontraron clientes");
+       // }
+
+        [HttpGet("find/{param}")]
+        [Authorize]
+        public IActionResult FindClienteById([FromRoute] int param)
+        {
+            var cliente = _clienteService.FindCliente(param);
+
+            if (cliente != null)
             {
-                return Ok(clientes);
+                return Ok(cliente);
             }
 
-            return NotFound("No se encontraron clientes");
+            return NotFound("No se encontro un cliente con el id ingresado");
         }
 
         [HttpPost]
