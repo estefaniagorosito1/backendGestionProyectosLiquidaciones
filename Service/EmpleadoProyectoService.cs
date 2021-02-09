@@ -10,6 +10,8 @@ namespace BackendGestionProyectosLiquidaciones.Service
     public interface IEmpleadoProyectoService
     {
         void AsignarEmpleadosProyecto(EmpleadoProyecto empleadoProyecto);
+
+        List<Empleado> GetEmpleadosProyecto(int idProyecto);
     }
 
 
@@ -30,6 +32,20 @@ namespace BackendGestionProyectosLiquidaciones.Service
 
                 dbContext.EmpleadoProyecto.Add(empleadoProyecto);
                 dbContext.SaveChanges();
+            }
+        }
+
+        public List<Empleado> GetEmpleadosProyecto(int idProyecto)
+        {
+            using (var scope = _scopeFactory.CreateScope())
+            {
+                var dbContext = scope.ServiceProvider.GetRequiredService<TpSeminarioContext>();
+
+                var empleados = dbContext.EmpleadoProyecto
+                                    .Where(ep => ep.Idproyecto.Equals(idProyecto))
+                                    .Select(ep => ep.IdempleadoNavigation).ToList();
+
+                return empleados;
             }
         }
     }

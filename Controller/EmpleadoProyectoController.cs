@@ -26,7 +26,23 @@ namespace BackendGestionProyectosLiquidaciones.Controller
         {
             _empleadoProyectoService.AsignarEmpleadosProyecto(empleadoProyecto);
 
-            return Ok("Empleado asignado al proyecto " + empleadoProyecto.IdproyectoNavigation.Descripcion);
+            return Ok("Empleado asignado al proyecto");
+        }
+
+
+        [HttpGet("{idProyecto}")]
+        [Authorize]
+        public IActionResult GetEmpleadosProyecto([FromRoute] int idProyecto)
+        {
+            var empleados = _empleadoProyectoService.GetEmpleadosProyecto(idProyecto);
+
+            if (empleados.Count != 0)
+            {
+                return Ok(empleados);
+            }
+
+            return BadRequest("No se encontraron empleados asociados a este proyecto");
+
         }
     }
 }
