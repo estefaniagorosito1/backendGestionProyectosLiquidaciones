@@ -27,5 +27,19 @@ namespace BackendGestionProyectosLiquidaciones.Controller
             _perfilEmpleadoService.AsignarPerfilEmpleado(perfilEmpleado);
             return Ok("Perfil " + perfilEmpleado.IdperfilNavigation.NombrePerfil + " asignado al empleado");
         }
+
+        [HttpGet("{idPerfil}")]
+        [Authorize]
+        public IActionResult GetEmpleadosByPerfil([FromRoute] int idPerfil)
+        {
+            var empleados = _perfilEmpleadoService.GetEmpleadosByPerfil(idPerfil);
+
+            if(empleados.Count != 0)
+            {
+                return Ok(empleados);
+            }
+
+            return BadRequest("No se encontraron empleados con el perfil seleccionado");
+        }
     }
 }
