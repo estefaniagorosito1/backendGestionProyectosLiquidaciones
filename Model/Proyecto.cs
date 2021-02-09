@@ -11,7 +11,7 @@ namespace BackendGestionProyectosLiquidaciones.Model
             Tarea = new HashSet<Tarea>();
         }
 
-        public int Idproyecto { get; set; }
+        public int? Idproyecto { get; set; }
         public int Idcliente { get; set; }
         public string NombreProyecto { get; set; }
         public string Descripcion { get; set; }

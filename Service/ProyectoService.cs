@@ -88,7 +88,7 @@ namespace BackendGestionProyectosLiquidaciones.Service
 
         public bool ModificarProyecto(Proyecto proyecto)
         {
-            Proyecto proyectoDB = FindProyectoByID(proyecto.Idproyecto);
+            Proyecto proyectoDB = FindProyectoByID((int)proyecto.Idproyecto);
 
             if (proyectoDB != null)
             {
@@ -98,6 +98,8 @@ namespace BackendGestionProyectosLiquidaciones.Service
                     dbContext.Proyecto.Update(proyecto);
                     dbContext.SaveChanges();
                     return true;
+
+
                 }
             }
 
