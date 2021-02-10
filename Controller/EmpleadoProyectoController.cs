@@ -22,9 +22,9 @@ namespace BackendGestionProyectosLiquidaciones.Controller
 
         [HttpPost]
         [Authorize]
-        public IActionResult AsignarEmpleadosProyecto([FromBody] EmpleadoProyecto empleadoProyecto)
+        public IActionResult AsignarEmpleadosProyecto([FromBody] List<EmpleadoProyecto> empleadosProyecto)
         {
-            _empleadoProyectoService.AsignarEmpleadosProyecto(empleadoProyecto);
+            _empleadoProyectoService.AsignarEmpleadosProyecto(empleadosProyecto);
 
             return Ok("Empleado asignado al proyecto");
         }

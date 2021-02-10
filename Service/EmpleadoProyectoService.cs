@@ -9,7 +9,7 @@ namespace BackendGestionProyectosLiquidaciones.Service
 {
     public interface IEmpleadoProyectoService
     {
-        void AsignarEmpleadosProyecto(EmpleadoProyecto empleadoProyecto);
+        void AsignarEmpleadosProyecto(List<EmpleadoProyecto> empleadoProyecto);
 
         List<Empleado> GetEmpleadosProyecto(int idProyecto);
     }
@@ -24,13 +24,23 @@ namespace BackendGestionProyectosLiquidaciones.Service
             _scopeFactory = scopeFactory;
         }
 
-        public void AsignarEmpleadosProyecto(EmpleadoProyecto empleadoProyecto)
+        public void AsignarEmpleadosProyecto(List<EmpleadoProyecto> empleadosProyecto)
         {
             using (var scope = _scopeFactory.CreateScope())
             {
                 var dbContext = scope.ServiceProvider.GetRequiredService<TpSeminarioContext>();
 
-                dbContext.EmpleadoProyecto.Add(empleadoProyecto);
+                var lista = dbContext.EmpleadoProyecto
+                    .Where(ep => ep.Idproyecto.Equals(empleadosProyecto[0].Idproyecto))
+                    .ToList();
+
+                dbContext.Remove(lista);
+
+                foreach (var item in empleadosProyecto)
+                {
+                    dbContext.EmpleadoProyecto.Add(item);
+                }
+
                 dbContext.SaveChanges();
             }
         }
