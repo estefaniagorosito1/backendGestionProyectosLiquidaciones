@@ -29,6 +29,15 @@ namespace BackendGestionProyectosLiquidaciones.Service
             {
                 var dbContext = scope.ServiceProvider.GetRequiredService<TpSeminarioContext>();
 
+                var perfiles = dbContext.PerfilEmpleado
+                                        .Where(pe => pe.Idempleado.Equals(perfilesEmpleado[0].Idempleado))
+                                        .ToList();
+
+                foreach (var item in perfiles)
+                {
+                    dbContext.PerfilEmpleado.Remove(item);
+                }
+
                 foreach (var item in perfilesEmpleado)
                 {
                     dbContext.PerfilEmpleado.Add(item);
