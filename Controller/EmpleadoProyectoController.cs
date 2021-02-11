@@ -26,7 +26,7 @@ namespace BackendGestionProyectosLiquidaciones.Controller
         {
             _empleadoProyectoService.AsignarEmpleadosProyecto(empleadosProyecto);
 
-            return Ok("Empleado asignado al proyecto");
+            return Ok("Empleado/s asignado/s al proyecto");
         }
 
 

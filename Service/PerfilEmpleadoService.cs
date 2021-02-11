@@ -9,7 +9,7 @@ namespace BackendGestionProyectosLiquidaciones.Service
 {
     public interface IPerfilEmpleadoService
     {
-        void AsignarPerfilEmpleado(PerfilEmpleado perfilEmpleado);
+        void AsignarPerfilEmpleado(List<PerfilEmpleado> perfilesEmpleado);
 
         List<Empleado> GetEmpleadosByPerfil(int idPerfil);
     }
@@ -23,13 +23,17 @@ namespace BackendGestionProyectosLiquidaciones.Service
             _scopeFactory = scopeFactory;
         }
 
-        public void AsignarPerfilEmpleado(PerfilEmpleado perfilEmpleado)
+        public void AsignarPerfilEmpleado(List<PerfilEmpleado> perfilesEmpleado)
         {
             using (var scope = _scopeFactory.CreateScope())
             {
                 var dbContext = scope.ServiceProvider.GetRequiredService<TpSeminarioContext>();
 
-                dbContext.PerfilEmpleado.Add(perfilEmpleado);
+                foreach (var item in perfilesEmpleado)
+                {
+                    dbContext.PerfilEmpleado.Add(item);
+                }
+
                 dbContext.SaveChanges();
             }
         }

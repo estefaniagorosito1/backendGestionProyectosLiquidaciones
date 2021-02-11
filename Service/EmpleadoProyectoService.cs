@@ -34,7 +34,10 @@ namespace BackendGestionProyectosLiquidaciones.Service
                     .Where(ep => ep.Idproyecto.Equals(empleadosProyecto[0].Idproyecto))
                     .ToList();
 
-                dbContext.Remove(lista);
+                foreach (var item in lista)
+                {
+                    dbContext.EmpleadoProyecto.Remove(item);
+                }
 
                 foreach (var item in empleadosProyecto)
                 {

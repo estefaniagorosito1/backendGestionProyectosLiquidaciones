@@ -22,10 +22,10 @@ namespace BackendGestionProyectosLiquidaciones.Controller
 
         [HttpPost]
         [Authorize]
-        public IActionResult AsignarPerfilEmpleado(PerfilEmpleado perfilEmpleado)
+        public IActionResult AsignarPerfilEmpleado([FromBody] List<PerfilEmpleado> perfilesEmpleado)
         {
-            _perfilEmpleadoService.AsignarPerfilEmpleado(perfilEmpleado);
-            return Ok("Perfil " + perfilEmpleado.IdperfilNavigation.NombrePerfil + " asignado al empleado");
+            _perfilEmpleadoService.AsignarPerfilEmpleado(perfilesEmpleado);
+            return Ok("Perfil/es asignado/s al empleado");
         }
 
         [HttpGet("{idPerfil}")]
