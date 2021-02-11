@@ -12,6 +12,8 @@ namespace BackendGestionProyectosLiquidaciones.Service
         void AsignarPerfilEmpleado(List<PerfilEmpleado> perfilesEmpleado);
 
         List<Empleado> GetEmpleadosByPerfil(int idPerfil);
+
+        List<Perfil> GetPerfilesEmpleado(int idEmpleado);
     }
 
     public class PerfilEmpleadoService : IPerfilEmpleadoService
@@ -61,5 +63,19 @@ namespace BackendGestionProyectosLiquidaciones.Service
                 return empleados;
             }
         }
+
+        public List<Perfil> GetPerfilesEmpleado(int idEmpleado)
+        {
+            using (var scope = _scopeFactory.CreateScope())
+            {
+                var dbContext = scope.ServiceProvider.GetRequiredService<TpSeminarioContext>();
+
+                var perfiles = dbContext.PerfilEmpleado
+                                        .Where(pe => pe.Idempleado.Equals(idEmpleado))
+                                        .Select(pe => pe.IdperfilNavigation)
+                                        .ToList();
+
+                return perfiles;
+            }
     }
 }

@@ -28,18 +28,27 @@ namespace BackendGestionProyectosLiquidaciones.Controller
             return Ok("Perfil/es asignado/s al empleado");
         }
 
-        [HttpGet("{idPerfil}")]
+        [HttpGet("/empleados/{idPerfil}")]
         [Authorize]
         public IActionResult GetEmpleadosByPerfil([FromRoute] int idPerfil)
         {
             var empleados = _perfilEmpleadoService.GetEmpleadosByPerfil(idPerfil);
 
-            if(empleados.Count != 0)
+            if (empleados.Count != 0)
             {
                 return Ok(empleados);
             }
 
             return BadRequest("No se encontraron empleados con el perfil seleccionado");
+        }
+
+        [HttpGet("/perfiles/{idEmpleado}")]
+        [Authorize]
+        public IActionResult GetPerfilesEmpleado([FromRoute] int idEmpleado)
+        {
+            var perfiles = _perfilEmpleadoService.GetPerfilesEmpleado(idEmpleado);
+
+            return Ok(perfiles);
         }
     }
 }
