@@ -77,5 +77,6 @@ namespace BackendGestionProyectosLiquidaciones.Service
 
                 return perfiles;
             }
+        }
     }
 }
