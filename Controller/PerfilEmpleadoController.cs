@@ -28,7 +28,7 @@ namespace BackendGestionProyectosLiquidaciones.Controller
             return Ok("Perfil/es asignado/s al empleado");
         }
 
-        [HttpGet("/empleados/{idPerfil}")]
+        [HttpGet("empleados/{idPerfil}")]
         [Authorize]
         public IActionResult GetEmpleadosByPerfil([FromRoute] int idPerfil)
         {
@@ -42,7 +42,7 @@ namespace BackendGestionProyectosLiquidaciones.Controller
             return BadRequest("No se encontraron empleados con el perfil seleccionado");
         }
 
-        [HttpGet("/perfiles/{idEmpleado}")]
+        [HttpGet("perfiles/{idEmpleado}")]
         [Authorize]
         public IActionResult GetPerfilesEmpleado([FromRoute] int idEmpleado)
         {

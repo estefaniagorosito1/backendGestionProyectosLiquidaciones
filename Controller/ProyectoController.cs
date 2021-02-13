@@ -35,7 +35,7 @@ namespace BackendGestionProyectosLiquidaciones.Controller
             return Ok(proyectos);
         }
 
-        [HttpGet("/cliente/{idcliente}")]
+        [HttpGet("cliente/{idcliente}")]
         [Authorize]
         public IActionResult GetProyectosByCliente([FromRoute] int IdCliente)
         {
@@ -49,7 +49,7 @@ namespace BackendGestionProyectosLiquidaciones.Controller
             return Ok(proyectosCliente);
         }
 
-        [HttpGet("/bynombre/{nombre}")]
+        [HttpGet("bynombre/{nombre}")]
         [Authorize]
         public IActionResult GetProyectosByNombre([FromRoute] string nombre)
         {

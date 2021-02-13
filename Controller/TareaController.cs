@@ -21,7 +21,7 @@ namespace BackendGestionProyectosLiquidaciones.Controller
             _tareaService = tareaService;
         }
 
-        [HttpGet("/lista/{IdProyecto}")]
+        [HttpGet("lista/{IdProyecto}")]
         [Authorize]
         public IActionResult FindTareasByProyecto([FromRoute] int IdProyecto)
         {

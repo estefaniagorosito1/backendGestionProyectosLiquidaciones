@@ -70,12 +70,26 @@ namespace BackendGestionProyectosLiquidaciones.Service
             {
                 var dbContext = scope.ServiceProvider.GetRequiredService<TpSeminarioContext>();
 
-                var perfiles = dbContext.PerfilEmpleado
+                var perfilEmpleado = dbContext.PerfilEmpleado
                                         .Where(pe => pe.Idempleado.Equals(idEmpleado))
-                                        .Select(pe => pe.IdperfilNavigation)
+                                        .Select(pe => pe.Idperfil)
                                         .ToList();
 
-                return perfiles;
+                List<Perfil> perfiles = new List<Perfil>();
+
+                foreach (var item in perfilEmpleado)
+                {
+                    var perfil = dbContext.Perfil.Find(item);
+
+                    if (!perfiles.Contains(perfil))
+                    {
+                        perfiles.Add(perfil);
+                    }
+
+                }
+
+                return perfiles.ToList();
+
             }
         }
     }
