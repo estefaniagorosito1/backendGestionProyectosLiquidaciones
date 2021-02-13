@@ -12,6 +12,8 @@ namespace BackendGestionProyectosLiquidaciones.Service
         int GetCantHorasTrabajadasEmpleado(int IdEmpleado, DateTime fechaInicio, DateTime fechaFin);
 
         int GetCantHorasTrabajadasProyectoPerfil(int IdProyecto, int IdPerfil);
+
+        int GetCantHorasAdeudadasProyecto(int IdProyecto);
     }
 
 
@@ -22,6 +24,20 @@ namespace BackendGestionProyectosLiquidaciones.Service
         public HoraTrabajadaService(IServiceScopeFactory scopeFactory)
         {
             _scopeFactory = scopeFactory;
+        }
+
+        public int GetCantHorasAdeudadasProyecto(int IdProyecto)
+        {
+            using (var scope = _scopeFactory.CreateScope())
+            {
+                var dbContext = scope.ServiceProvider.GetRequiredService<TpSeminarioContext>();
+
+                var horas = dbContext.HoraTrabajada
+                                     .Where(ht => ht.Idproyecto.Equals(IdProyecto) 
+                                            && ht.EstadoHoraTrabajada.Equals(EstadoHoras.ADEUDADAS));
+
+                return horas.Sum(x => x.CantidadHoraTrabajada);
+            }
         }
 
         public int GetCantHorasTrabajadasEmpleado(int IdEmpleado, DateTime fechaInicio, DateTime fechaFin)
