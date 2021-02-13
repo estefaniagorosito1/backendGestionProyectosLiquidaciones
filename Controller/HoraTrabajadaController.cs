@@ -48,5 +48,19 @@ namespace BackendGestionProyectosLiquidaciones.Controller
             return BadRequest("No hay horas cargadas con este perfil en el proyecto seleccionado");
         }
 
+        [HttpGet("{idProyecto}")]
+        [Authorize]
+        public IActionResult GetCantHorasAdeudadasProyecto([FromRoute] int idProyecto)
+        {
+            var horas = _horaTrabajadaService.GetCantHorasAdeudadasProyecto(idProyecto);
+
+            if(horas != 0)
+            {
+                return Ok(horas);
+            }
+
+            return BadRequest("No hay horas adeudadas en el proyecto seleccionado");
+        }
+
     }
 }
