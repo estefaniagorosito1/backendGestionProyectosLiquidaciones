@@ -28,5 +28,13 @@ namespace BackendGestionProyectosLiquidaciones.Controller
             List<Provincia> provincias = _provinciaService.GetProvincias();
             return Ok(provincias);
         }
+
+        [HttpGet("findOne/{IdProvincia}")]
+        [Authorize]
+        public IActionResult GetProvinciaById([FromRoute] int IdProvincia)
+        {
+            Provincia provincia = _provinciaService.GetProvinciaById(IdProvincia);
+            return Ok(provincia);
+        }
     }
 }

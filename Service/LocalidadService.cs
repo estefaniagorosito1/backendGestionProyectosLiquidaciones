@@ -10,6 +10,9 @@ namespace BackendGestionProyectosLiquidaciones.Service
     public interface ILocalidadService
     {
         List<Localidad> GetLocalidades(int IdProvincia);
+
+        Localidad GetLocalidadById(int IdLocalidad);
+
     }
 
     public class LocalidadService : ILocalidadService
@@ -32,6 +35,17 @@ namespace BackendGestionProyectosLiquidaciones.Service
                                   select l;
 
                 return localidades.ToList();
+            }
+        }
+
+        public Localidad GetLocalidadById(int IdLocalidad)
+        {
+            using (var scope = _scopeFactory.CreateScope())
+            {
+                var dbContext = scope.ServiceProvider.GetRequiredService<TpSeminarioContext>();
+                var localidad = dbContext.Localidad.Where(lo => lo.Idlocalidad== IdLocalidad).First();
+
+                return localidad;
             }
         }
     }

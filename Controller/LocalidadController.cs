@@ -29,5 +29,12 @@ namespace BackendGestionProyectosLiquidaciones.Controller
             return Ok(localidades);
         }
 
+        [HttpGet("findOne/{IdLocalidad}")]
+        [Authorize]
+        public IActionResult GetLocalidadById([FromRoute] int IdLocalidad)
+        {
+            Localidad localidad = _localidadService.GetLocalidadById(IdLocalidad);
+            return Ok(localidad);
+        }
     }
 }

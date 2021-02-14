@@ -10,6 +10,8 @@ namespace BackendGestionProyectosLiquidaciones.Service
     public interface IProvinciaService
     {
         List<Provincia> GetProvincias();
+
+        Provincia GetProvinciaById(int IdProvincia);
     }
 
     public class ProvinciaService : IProvinciaService
@@ -27,6 +29,17 @@ namespace BackendGestionProyectosLiquidaciones.Service
             {
                 var dbContext = scope.ServiceProvider.GetRequiredService<TpSeminarioContext>();
                 return dbContext.Provincia.ToList();
+            }
+        }
+
+        public Provincia GetProvinciaById(int IdProvincia)
+        {
+            using (var scope = _scopeFactory.CreateScope())
+            {
+                var dbContext = scope.ServiceProvider.GetRequiredService<TpSeminarioContext>();
+                var provincia = dbContext.Provincia.Where(pro => pro.Idprovincia == IdProvincia).First();
+
+                return provincia;
             }
         }
     }
