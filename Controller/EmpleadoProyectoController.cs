@@ -35,14 +35,7 @@ namespace BackendGestionProyectosLiquidaciones.Controller
         public IActionResult GetEmpleadosProyecto([FromRoute] int idProyecto)
         {
             var empleados = _empleadoProyectoService.GetEmpleadosProyecto(idProyecto);
-
-            if (empleados.Count != 0)
-            {
-                return Ok(empleados);
-            }
-
-            return BadRequest("No se encontraron empleados asociados a este proyecto");
-
+            return Ok(empleados);
         }
     }
 }
