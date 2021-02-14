@@ -90,11 +90,11 @@ namespace BackendGestionProyectosLiquidaciones
             services.AddSingleton<IProvinciaService, ProvinciaService>();
             services.AddSingleton<IProyectoService, ProyectoService>();
             services.AddSingleton<IPerfilService, PerfilService>();
+            services.AddSingleton<IRolService, RolService>();
             services.AddSingleton<IPerfilEmpleadoService, PerfilEmpleadoService>();
             services.AddSingleton<IEmpleadoProyectoService, EmpleadoProyectoService>();
             services.AddSingleton<IEscalaService, EscalaService>();
             services.AddSingleton<ILiquidacionService, LiquidacionService>();
-
         }
 
         // -------------------------------------------------------------------------------------------------
