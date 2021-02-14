@@ -58,5 +58,13 @@ namespace BackendGestionProyectosLiquidaciones.Controller
             return Ok();
 
         }
+
+        [HttpGet("{IdEmpleado}")]
+        [Authorize]
+        public IActionResult GetUsuarioById([FromRoute] int IdEmpleado)
+        {
+            var usuario = _usuarioService.FindUsuarioByIdEmpleado(IdEmpleado);
+            return Ok(usuario);
+        }
     }
 }
