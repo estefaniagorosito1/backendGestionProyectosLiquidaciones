@@ -26,12 +26,6 @@ namespace BackendGestionProyectosLiquidaciones.Controller
         public IActionResult GetProyectos()
         {
             var proyectos = _proyectoService.FindProyectos();
-
-            if (proyectos.Count == 0)
-            {
-                return NotFound("No se encontraron proyectos");
-            }
-
             return Ok(proyectos);
         }
 

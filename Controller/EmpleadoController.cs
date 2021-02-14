@@ -26,13 +26,7 @@ namespace BackendGestionProyectosLiquidaciones.Controller
         public IActionResult FindEmpleados()
         {
             var empleados = _empleadoService.FindEmpleados();
-
-            if (empleados.Count != 0)
-            {
-                return Ok(empleados);
-            }
-
-            return NotFound("No se encontraron empleados");
+            return Ok(empleados);
         }
 
         [HttpGet("{param}")]

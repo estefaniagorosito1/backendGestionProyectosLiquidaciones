@@ -26,13 +26,7 @@ namespace BackendGestionProyectosLiquidaciones.Controller
         public IActionResult FindClientes()
         {
             var clientes = _clienteService.FindClientes();
-
-            if (clientes.Count != 0)
-            {
-                return Ok(clientes);
-            }
-
-            return NotFound("No se encontraron clientes");
+            return Ok(clientes);
         }
 
         [HttpGet("find/{param}")]
