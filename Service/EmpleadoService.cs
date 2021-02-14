@@ -38,6 +38,34 @@ namespace BackendGestionProyectosLiquidaciones.Service
             }
         }
 
+        public void EliminarEmpleado(int IdEmpleado)
+        {
+            Empleado empleado = FindEmpleadoByID(IdEmpleado);
+
+            if (empleado != null)
+            {
+                using (var scope = _scopeFactory.CreateScope())
+                {
+                    var dbContext = scope.ServiceProvider.GetRequiredService<TpSeminarioContext>();
+
+                    // Borro perfiles
+                    var perfiles = dbContext.PerfilEmpleado.Where(pe => pe.Idempleado == empleado.Idempleado).ToList();
+
+                    foreach (var item in perfiles)
+                    {
+                        dbContext.PerfilEmpleado.Remove(item);
+                    }
+
+                    // Borro usuario
+                    var usuario = dbContext.Usuario.Where(us => us.Idempleado== empleado.Idempleado).First();
+                    dbContext.Usuario.Remove(usuario);
+
+                    dbContext.Empleado.Remove(empleado);
+                    dbContext.SaveChanges();
+                }
+            }
+        }
+
         public List<Empleado> FindEmpleadosByNombreApellido(string param)
         {
             using (var scope = _scopeFactory.CreateScope())
@@ -97,7 +125,7 @@ namespace BackendGestionProyectosLiquidaciones.Service
 
 
 
-    public void EliminarEmpleado(int IdEmpleado)
+    public void EliminarEmpleaasdasddobackup(int IdEmpleado)
         {
             Empleado empleado = FindEmpleadoByID(IdEmpleado);
 
