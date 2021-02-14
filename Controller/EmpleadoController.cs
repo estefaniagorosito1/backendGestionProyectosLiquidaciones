@@ -15,10 +15,12 @@ namespace BackendGestionProyectosLiquidaciones.Controller
     public class EmpleadoController : ControllerBase
     {
         private IEmpleadoService _empleadoService;
+        private IUsuarioService _usuarioService;
 
-        public EmpleadoController(IEmpleadoService empleadoService)
+        public EmpleadoController(IEmpleadoService empleadoService, IUsuarioService usuarioService)
         {
             _empleadoService = empleadoService;
+            _usuarioService = usuarioService;
         }
 
         [HttpGet]
@@ -27,6 +29,14 @@ namespace BackendGestionProyectosLiquidaciones.Controller
         {
             var empleados = _empleadoService.FindEmpleados();
             return Ok(empleados);
+        }
+
+        [HttpGet("usuario/{IdEmpleado}")]
+        [Authorize]
+        public IActionResult FindUsuarioById([FromRoute] int IdEmpleado)
+        {
+            var usuario = _usuarioService.FindUsuarioByIdEmpleado(IdEmpleado);
+            return Ok(usuario);
         }
 
         [HttpGet("{param}")]
