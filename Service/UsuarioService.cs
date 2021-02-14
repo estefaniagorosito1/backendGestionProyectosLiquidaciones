@@ -13,6 +13,8 @@ namespace BackendGestionProyectosLiquidaciones.Service
 
         Usuario FindUsuarioById(int IdUsuario);
 
+        Usuario FindUsuarioByIdEmpleado(int IdEmpleado);
+
         bool CrearUsuario(Usuario usuario);
 
         bool ModificarUsuario(Usuario usuario);
@@ -48,6 +50,16 @@ namespace BackendGestionProyectosLiquidaciones.Service
             {
                 var dbContext = scope.ServiceProvider.GetRequiredService<TpSeminarioContext>();
                 return dbContext.Usuario.FirstOrDefault(user => user.Idusuario == IdUsuario);
+            }
+        }
+
+        public Usuario FindUsuarioByIdEmpleado(int IdEmpleado)
+        {
+            using (var scope = _scopeFactory.CreateScope())
+            {
+                var dbContext = scope.ServiceProvider.GetRequiredService<TpSeminarioContext>();
+                Usuario usuario = dbContext.Usuario.FirstOrDefault(user => user.Idempleado == IdEmpleado);
+                return usuario;
             }
         }
 
