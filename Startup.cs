@@ -89,6 +89,7 @@ namespace BackendGestionProyectosLiquidaciones
             services.AddSingleton<ILocalidadService, LocalidadService>();
             services.AddSingleton<IProvinciaService, ProvinciaService>();
             services.AddSingleton<IProyectoService, ProyectoService>();
+            services.AddSingleton<ITareaService, TareaService>();
             services.AddSingleton<IPerfilService, PerfilService>();
             services.AddSingleton<IRolService, RolService>();
             services.AddSingleton<IPerfilEmpleadoService, PerfilEmpleadoService>();

@@ -67,7 +67,7 @@ namespace BackendGestionProyectosLiquidaciones.Service
 
         public bool ModificarTarea(Tarea tarea)
         {
-            var tareaDB = FindTarea(tarea.Idtarea);
+            var tareaDB = FindTarea((int)tarea.Idtarea);
 
             if (tareaDB != null)
             {

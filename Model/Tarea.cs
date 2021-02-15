@@ -10,7 +10,7 @@ namespace BackendGestionProyectosLiquidaciones.Model
             HoraTrabajada = new HashSet<HoraTrabajada>();
         }
 
-        public int Idtarea { get; set; }
+        public int? Idtarea { get; set; }
         public int Idproyecto { get; set; }
         public int Idempleado { get; set; }
         public int Idperfil { get; set; }
