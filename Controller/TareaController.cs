@@ -26,13 +26,7 @@ namespace BackendGestionProyectosLiquidaciones.Controller
         public IActionResult FindTareasByProyecto([FromRoute] int IdProyecto)
         {
             var tareas = _tareaService.FindTareasByProyecto(IdProyecto);
-
-            if (tareas.Count != 0)
-            {
-                return Ok(tareas);
-            }
-
-            return BadRequest("No se encontraron tareas cargadas en este proyecto");
+            return Ok(tareas);
         }
 
         [HttpPost]
