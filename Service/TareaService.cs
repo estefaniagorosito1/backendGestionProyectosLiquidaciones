@@ -11,6 +11,8 @@ namespace BackendGestionProyectosLiquidaciones.Service
     {
         List<Tarea> FindTareasByProyecto(int IdProyecto);
 
+        List<Tarea> FindTareasEmpleado(int IdEmpleado);
+
         Tarea FindTarea(int IdTarea);
 
         void CrearTarea(Tarea tarea);
@@ -106,6 +108,19 @@ namespace BackendGestionProyectosLiquidaciones.Service
                 dbContext.Tarea.Remove(tarea);
                 dbContext.SaveChanges();
             }
+        }
+
+        public List<Tarea> FindTareasEmpleado(int IdEmpleado)
+        {
+            using (var scope = _scopeFactory.CreateScope())
+            {
+                var dbContext = scope.ServiceProvider.GetRequiredService<TpSeminarioContext>();
+
+                var tareas = dbContext.Tarea.Where(t => t.Idempleado == IdEmpleado).ToList();
+
+                return tareas;
+            }
+
         }
     }
 }

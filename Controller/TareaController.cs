@@ -29,6 +29,14 @@ namespace BackendGestionProyectosLiquidaciones.Controller
             return Ok(tareas);
         }
 
+        [HttpGet("empleado/{IdEmpleado}")]
+        [Authorize]
+        public IActionResult FindTareasEmpleado([FromRoute] int IdEmpleado)
+        {
+            var tareas = _tareaService.FindTareasEmpleado(IdEmpleado);
+            return Ok(tareas);
+        }
+
         [HttpPost]
         [Authorize]
         public IActionResult CrearTarea([FromBody] Tarea tarea)
