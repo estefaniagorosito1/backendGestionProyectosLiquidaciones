@@ -18,6 +18,7 @@ namespace BackendGestionProyectosLiquidaciones.Model
         public int HorasEstimadasTarea { get; set; }
         public int? HorasOverbudget { get; set; }
         public int HorasTrabajadas { get; set; }
+        public string finalizada { get; set; }
 
         public PerfilEmpleado Id { get; set; }
         public Proyecto IdproyectoNavigation { get; set; }

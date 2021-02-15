@@ -350,6 +350,10 @@ namespace BackendGestionProyectosLiquidaciones.Model
                     .HasMaxLength(255)
                     .IsUnicode(false);
 
+                entity.Property(e => e.finalizada)
+                      .HasMaxLength(50)
+                      .IsUnicode(false);
+
                 entity.Property(e => e.Idempleado).HasColumnName("IDEmpleado");
 
                 entity.Property(e => e.Idperfil).HasColumnName("IDPerfil");
