@@ -53,6 +53,14 @@ namespace BackendGestionProyectosLiquidaciones.Controller
             return NotFound("No se encontraron empleados");
         }
 
+        [HttpGet("empleado/{IdEmpleado}")]
+        [Authorize]
+        public IActionResult FindEmpleado([FromRoute] int IdEmpleado)
+        {
+            var empleado = _empleadoService.FindEmpleadoById(IdEmpleado);
+            return Ok(empleado);
+        }
+
         [HttpPost]
         [Authorize]
         public IActionResult CrearEmpleado([FromBody] Empleado empleado)

@@ -13,6 +13,8 @@ namespace BackendGestionProyectosLiquidaciones.Service
 
         List<Empleado> FindEmpleadosByNombreApellido(string param);
 
+        Empleado FindEmpleadoById(int IdEmpleado);
+
         void CrearEmpleado(Empleado empleado);
 
         bool ModificarEmpleado(Empleado empleado);
@@ -57,7 +59,7 @@ namespace BackendGestionProyectosLiquidaciones.Service
                     }
 
                     // Borro usuario
-                    var usuario = dbContext.Usuario.Where(us => us.Idempleado== empleado.Idempleado).First();
+                    var usuario = dbContext.Usuario.Where(us => us.Idempleado == empleado.Idempleado).First();
                     dbContext.Usuario.Remove(usuario);
 
                     dbContext.Empleado.Remove(empleado);
@@ -124,8 +126,7 @@ namespace BackendGestionProyectosLiquidaciones.Service
         }
 
 
-
-    public void EliminarEmpleaasdasddobackup(int IdEmpleado)
+        public void EliminarEmpleaasdasddobackup(int IdEmpleado)
         {
             Empleado empleado = FindEmpleadoByID(IdEmpleado);
 
@@ -140,5 +141,13 @@ namespace BackendGestionProyectosLiquidaciones.Service
             }
         }
 
+        public Empleado FindEmpleadoById(int IdEmpleado)
+        {
+            using (var scope = _scopeFactory.CreateScope())
+            {
+                var dbContext = scope.ServiceProvider.GetRequiredService<TpSeminarioContext>();
+                return dbContext.Empleado.Find(IdEmpleado);
+            }
+        }
     }
 }

@@ -16,6 +16,8 @@ namespace BackendGestionProyectosLiquidaciones.Service
         void CrearTarea(Tarea tarea);
 
         bool ModificarTarea(Tarea tarea);
+
+        void EliminarTarea(int IdTarea);
     }
 
     public class TareaService : ITareaService
@@ -82,6 +84,28 @@ namespace BackendGestionProyectosLiquidaciones.Service
             }
 
             return false;
+        }
+
+        public void EliminarTarea(int IdTarea)
+        {
+            using (var scope = _scopeFactory.CreateScope())
+            {
+                var dbContext = scope.ServiceProvider.GetRequiredService<TpSeminarioContext>();
+
+                var tarea = dbContext.Tarea.Find(IdTarea);
+                tarea.Id = null;
+                tarea.IdproyectoNavigation = null;
+
+                var horas = dbContext.HoraTrabajada.Where(ht => ht.Idtarea == IdTarea).ToList();
+
+                foreach (var item in horas)
+                {
+                    dbContext.HoraTrabajada.Remove(item);
+                }
+
+                dbContext.Tarea.Remove(tarea);
+                dbContext.SaveChanges();
+            }
         }
     }
 }

@@ -50,6 +50,14 @@ namespace BackendGestionProyectosLiquidaciones.Controller
 
             return BadRequest("No se pudo modifcar la tarea");
         }
+
+        [HttpDelete("{IdTarea}")]
+        [Authorize]
+        public IActionResult EliminarTarea([FromRoute] int IdTarea)
+        {
+            _tareaService.EliminarTarea(IdTarea);
+            return Ok();
+        }
         
     }
 }
