@@ -92,7 +92,7 @@ namespace BackendGestionProyectosLiquidaciones.Service
             {
                 var dbContext = scope.ServiceProvider.GetRequiredService<TpSeminarioContext>();
 
-                var tarea = dbContext.Tarea.Find(IdTarea);
+                var tarea = dbContext.Tarea.Where(t => t.Idtarea == IdTarea).First();
                 tarea.Id = null;
                 tarea.IdproyectoNavigation = null;
 
