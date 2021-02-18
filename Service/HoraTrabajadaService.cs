@@ -14,6 +14,8 @@ namespace BackendGestionProyectosLiquidaciones.Service
         int GetCantHorasTrabajadasProyectoPerfil(int IdProyecto, int IdPerfil);
 
         int GetCantHorasAdeudadasProyecto(int IdProyecto);
+
+        void CrearHoraTrabajada(HoraTrabajada horaTrabajada);
     }
 
 
@@ -24,6 +26,17 @@ namespace BackendGestionProyectosLiquidaciones.Service
         public HoraTrabajadaService(IServiceScopeFactory scopeFactory)
         {
             _scopeFactory = scopeFactory;
+        }
+
+
+        public void CrearHoraTrabajada (HoraTrabajada horaTrabajada)
+        {
+            using (var scope = _scopeFactory.CreateScope())
+            {
+                var dbContext = scope.ServiceProvider.GetRequiredService<TpSeminarioContext>();
+                dbContext.HoraTrabajada.Add(horaTrabajada);
+                dbContext.SaveChanges();
+            }
         }
 
         public int GetCantHorasAdeudadasProyecto(int IdProyecto)

@@ -95,6 +95,7 @@ namespace BackendGestionProyectosLiquidaciones
             services.AddSingleton<IPerfilEmpleadoService, PerfilEmpleadoService>();
             services.AddSingleton<IEmpleadoProyectoService, EmpleadoProyectoService>();
             services.AddSingleton<IEscalaService, EscalaService>();
+            services.AddSingleton<IHoraTrabajadaService, HoraTrabajadaService>();
             services.AddSingleton<ILiquidacionService, LiquidacionService>();
         }
 

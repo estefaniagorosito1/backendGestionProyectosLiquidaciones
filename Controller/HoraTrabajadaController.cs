@@ -1,4 +1,5 @@
 ﻿using BackendGestionProyectosLiquidaciones.Service;
+using BackendGestionProyectosLiquidaciones.Model;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -8,8 +9,8 @@ using System.Threading.Tasks;
 
 namespace BackendGestionProyectosLiquidaciones.Controller
 {
-    [ApiController]
     [Authorize]
+    [ApiController]
     [Route("[controller]")]
     public class HoraTrabajadaController : ControllerBase
     {
@@ -18,6 +19,14 @@ namespace BackendGestionProyectosLiquidaciones.Controller
         public HoraTrabajadaController(IHoraTrabajadaService horaTrabajadaService)
         {
             _horaTrabajadaService = horaTrabajadaService;
+        }
+
+        [HttpPost]
+        [Authorize]
+        public IActionResult CrearHoraTrabajada([FromBody] HoraTrabajada horaTrabajada)
+        {
+            _horaTrabajadaService.CrearHoraTrabajada(horaTrabajada);
+            return Ok("Hora trabajada creada correctamente");
         }
 
         [HttpGet("{IdEmpleado}/{fechaInicio}/{fechaFin}")]
