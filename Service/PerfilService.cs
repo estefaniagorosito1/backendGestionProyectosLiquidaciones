@@ -10,6 +10,8 @@ namespace BackendGestionProyectosLiquidaciones.Service
     public interface IPerfilService
     {
         List<Perfil> FindPerfiles();
+
+        Perfil GetPerfilById(int idPerfil);
     }
 
     public class PerfilService : IPerfilService
@@ -27,6 +29,14 @@ namespace BackendGestionProyectosLiquidaciones.Service
             {
                 var dbContext = scope.ServiceProvider.GetRequiredService<TpSeminarioContext>();
                 return dbContext.Perfil.ToList();
+            }
+        }
+
+        public Perfil GetPerfilById(int idPerfil) {
+            using (var scope = _scopeFactory.CreateScope())
+            {
+                var dbContext = scope.ServiceProvider.GetRequiredService<TpSeminarioContext>();
+                return dbContext.Perfil.Where(per => per.Idperfil == idPerfil).First();
             }
         }
     }

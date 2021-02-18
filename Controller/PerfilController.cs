@@ -28,5 +28,13 @@ namespace BackendGestionProyectosLiquidaciones.Controller
             return Ok(perfiles);
         }
 
+        [HttpGet("{IdPerfil}")]
+        [Authorize]
+        public IActionResult GetPerfilById([FromRoute] int IdPerfil)
+        {
+            var perfiles = _perfilService.GetPerfilById(IdPerfil);
+            return Ok(perfiles);
+        }
+
     }
 }
