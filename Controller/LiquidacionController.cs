@@ -35,6 +35,14 @@ namespace BackendGestionProyectosLiquidaciones.Controller
             }
         }
 
+        [HttpGet("empleado/{IdEmpleado}")]
+        [Authorize]
+        public IActionResult GetLiquidacionesEmpleado([FromRoute] int IdEmpleado)
+        {
+            var liquidaciones = _liquidacionService.GetLiquidacionesEmpleado(IdEmpleado);
+            return Ok(liquidaciones);
+        }
+
         [HttpGet("{codLiquidacion}")]
         [Authorize]
         public IActionResult GetLiquidacion([FromRoute] int codLiquidacion)

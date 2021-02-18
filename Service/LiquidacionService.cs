@@ -15,6 +15,7 @@ namespace BackendGestionProyectosLiquidaciones.Service
 
         List<Liquidacion> GetLiquidacionesPeriodo(DateTime fechaDesde, DateTime fechaHasta);
 
+        List<Liquidacion> GetLiquidacionesEmpleado(int idEmpleado);
     }
 
     public class LiquidacionService : ILiquidacionService
@@ -44,11 +45,10 @@ namespace BackendGestionProyectosLiquidaciones.Service
                 DateTime fechaIngreso = dbContext.Empleado.Find(liquidacion.Idempleado).FechaIngresoEmpleado;
                 int antiguedad = DateTime.Today.Year - fechaIngreso.Year;
 
-                // Horas trabajadas
+                // Horas trabajadas ht.FechaHoraTrabajada.Month == liquidacion.MesLiquidado
                 List<HoraTrabajada> horas = dbContext.HoraTrabajada
-                                                        .Where(ht => ht.FechaHoraTrabajada.Month == liquidacion.MesLiquidado
-                                                                && ht.Idempleado == liquidacion.Idempleado
-                                                                && ht.EstadoHoraTrabajada.Equals(EstadoHoras.ADEUDADAS))
+                                                        .Where(ht => ht.Idempleado == liquidacion.Idempleado
+                                                                && ht.EstadoHoraTrabajada == "ADEUDADAS")
                                                         .ToList();
 
                 //var horasOverbudget = dbContext.Tarea.Where(t => t.Idempleado == liquidacion.Idempleado)
@@ -112,7 +112,21 @@ namespace BackendGestionProyectosLiquidaciones.Service
                 liquidacion.Estado = EstadoLiquidacion.EMITIDA.ToString();
 
                 dbContext.Liquidacion.Add(liquidacion);
+
                 dbContext.SaveChanges();
+            }
+        }
+
+        public List <Liquidacion> GetLiquidacionesEmpleado (int idEmpleado)
+        {
+            using (var scope = _scopeFactory.CreateScope())
+            {
+                var dbContext = scope.ServiceProvider.GetRequiredService<TpSeminarioContext>();
+
+                var liquidaciones= dbContext.Liquidacion
+                                    .Where(liq => liq.Idempleado == idEmpleado).ToList();
+
+                return liquidaciones;
             }
         }
 
