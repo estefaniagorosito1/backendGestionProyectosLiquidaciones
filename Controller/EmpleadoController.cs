@@ -61,6 +61,14 @@ namespace BackendGestionProyectosLiquidaciones.Controller
             return Ok(empleado);
         }
 
+        [HttpGet("empleadosDesocupados/{IdProyecto}")]
+        [Authorize]
+        public IActionResult FindEmpleadosDesocupados([FromRoute] int IdProyecto)
+        {
+            var empleados = _empleadoService.FindEmpleadosSinTareas(IdProyecto);
+            return Ok(empleados);
+        }
+
         [HttpPost]
         [Authorize]
         public IActionResult CrearEmpleado([FromBody] Empleado empleado)

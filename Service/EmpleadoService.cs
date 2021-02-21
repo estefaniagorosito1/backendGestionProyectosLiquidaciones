@@ -20,6 +20,8 @@ namespace BackendGestionProyectosLiquidaciones.Service
         bool ModificarEmpleado(Empleado empleado);
 
         void EliminarEmpleado(int IdEmpleado);
+
+        List<Empleado> FindEmpleadosSinTareas(int IdProyecto);
     }
 
     public class EmpleadoService : IEmpleadoService
@@ -147,6 +149,41 @@ namespace BackendGestionProyectosLiquidaciones.Service
             {
                 var dbContext = scope.ServiceProvider.GetRequiredService<TpSeminarioContext>();
                 return dbContext.Empleado.Find(IdEmpleado);
+            }
+        }
+
+        public List<Empleado> FindEmpleadosSinTareas(int IdProyecto)
+        {
+
+            using (var scope = _scopeFactory.CreateScope())
+            {
+                var dbContext = scope.ServiceProvider.GetRequiredService<TpSeminarioContext>();
+
+                var empleados = dbContext.EmpleadoProyecto
+                    .Where(ep => ep.Idproyecto.Equals(IdProyecto))
+                    .Select(ep => ep.IdempleadoNavigation).ToList();
+
+                var empleadosLibres = new List<Empleado>();
+
+                foreach (var emp in empleados)
+                {
+                    var tareasEmpleado = dbContext.Tarea.Where(t => t.Idempleado == emp.Idempleado && t.Idproyecto == IdProyecto).ToList();
+                    
+                    if (tareasEmpleado.Count == 0)
+                    {
+                        empleadosLibres.Add(emp);
+                    } else {
+                        var tareaIncompleta = tareasEmpleado.Find((tarea) => tarea.finalizada == "false");
+                        
+                        if (tareaIncompleta == null)
+                        {
+                        empleadosLibres.Add(emp);
+                        }
+
+                    }
+                }
+
+                return empleadosLibres;
             }
         }
     }
