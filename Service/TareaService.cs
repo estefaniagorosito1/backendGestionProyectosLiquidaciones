@@ -20,6 +20,8 @@ namespace BackendGestionProyectosLiquidaciones.Service
         bool ModificarTarea(Tarea tarea);
 
         void EliminarTarea(int IdTarea);
+
+        int GetCantHorasOverbudgetProyecto(int idProyecto);
     }
 
     public class TareaService : ITareaService
@@ -121,6 +123,20 @@ namespace BackendGestionProyectosLiquidaciones.Service
                 return tareas;
             }
 
+        }
+
+        public int GetCantHorasOverbudgetProyecto(int idProyecto)
+        {
+
+            using (var scope = _scopeFactory.CreateScope())
+            {
+                var dbContext = scope.ServiceProvider.GetRequiredService<TpSeminarioContext>();
+
+                var horas = dbContext.Tarea
+                                     .Where(tarea => tarea.Idproyecto == idProyecto);
+
+                return (int)horas.Sum(x => x.HorasOverbudget);
+            }
         }
     }
 }

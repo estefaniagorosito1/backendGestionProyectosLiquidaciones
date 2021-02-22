@@ -46,8 +46,7 @@ namespace BackendGestionProyectosLiquidaciones.Service
                 var dbContext = scope.ServiceProvider.GetRequiredService<TpSeminarioContext>();
 
                 var horas = dbContext.HoraTrabajada
-                                     .Where(ht => ht.Idproyecto.Equals(IdProyecto) 
-                                            && ht.EstadoHoraTrabajada.Equals(EstadoHoras.ADEUDADAS));
+                                     .Where(ht => ht.Idproyecto == IdProyecto && ht.EstadoHoraTrabajada == "ADEUDADAS");
 
                 return horas.Sum(x => x.CantidadHoraTrabajada);
             }

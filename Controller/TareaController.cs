@@ -66,6 +66,13 @@ namespace BackendGestionProyectosLiquidaciones.Controller
             _tareaService.EliminarTarea(IdTarea);
             return Ok();
         }
-        
+
+        [HttpGet("overbudget/{idProyecto}")]
+        [Authorize]
+        public IActionResult GetCantHorasOverbudgetProyecto([FromRoute] int idProyecto)
+        {
+            var horas = _tareaService.GetCantHorasOverbudgetProyecto(idProyecto);
+            return Ok(horas);
+        }
     }
 }

@@ -34,13 +34,7 @@ namespace BackendGestionProyectosLiquidaciones.Controller
         public IActionResult GetCantHorasTrabajadasEmpleado([FromRoute] int IdEmpleado, [FromRoute] DateTime fechaInicio, [FromRoute] DateTime fechaFin)
         {
             var horas = _horaTrabajadaService.GetCantHorasTrabajadasEmpleado(IdEmpleado, fechaInicio, fechaFin);
-
-            if (horas != 0)
-            {
-                return Ok(horas);
-            }
-
-            return BadRequest("El empleado no tiene horas cargadas en ese período de tiempo");
+            return Ok(horas);
         }
 
         [HttpGet("{IdProyecto}/{IdPerfil}")]
@@ -48,13 +42,7 @@ namespace BackendGestionProyectosLiquidaciones.Controller
         public IActionResult GetCantHorasTrabajadasProyectoPerfil([FromRoute] int IdProyecto, [FromRoute] int IdPerfil)
         {
             var horas = _horaTrabajadaService.GetCantHorasTrabajadasProyectoPerfil(IdProyecto, IdPerfil);
-
-            if (horas != 0)
-            {
-                return Ok(horas);
-            }
-
-            return BadRequest("No hay horas cargadas con este perfil en el proyecto seleccionado");
+            return Ok(horas);
         }
 
         [HttpGet("{idProyecto}")]
@@ -62,14 +50,7 @@ namespace BackendGestionProyectosLiquidaciones.Controller
         public IActionResult GetCantHorasAdeudadasProyecto([FromRoute] int idProyecto)
         {
             var horas = _horaTrabajadaService.GetCantHorasAdeudadasProyecto(idProyecto);
-
-            if(horas != 0)
-            {
-                return Ok(horas);
-            }
-
-            return BadRequest("No hay horas adeudadas en el proyecto seleccionado");
+            return Ok(horas);
         }
-
     }
 }

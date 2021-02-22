@@ -46,14 +46,28 @@ namespace BackendGestionProyectosLiquidaciones.Service
                 int antiguedad = DateTime.Today.Year - fechaIngreso.Year;
 
                 // Horas trabajadas ht.FechaHoraTrabajada.Month == liquidacion.MesLiquidado
+                // Traigo las adeudadas
                 List<HoraTrabajada> horas = dbContext.HoraTrabajada
                                                         .Where(ht => ht.Idempleado == liquidacion.Idempleado
                                                                 && ht.EstadoHoraTrabajada == "ADEUDADAS")
                                                         .ToList();
 
-                //var horasOverbudget = dbContext.Tarea.Where(t => t.Idempleado == liquidacion.Idempleado)
-                //                                     .Select(t => t.HorasOverbudget)
-                //                                     .Sum();
+                List<Tarea> tareasAdeudadas = new List<Tarea>(); ;
+
+                foreach (var horaTrabajada in horas)
+                {
+                    // Por cada adeudada traigo la tarea de esa adeudada
+                    tareasAdeudadas.Add(dbContext.Tarea.Where(t => t.Idtarea == horaTrabajada.Idtarea).First());
+                }
+                
+                var importeHorasOverbudget = 0;
+
+                foreach (var tarea in tareasAdeudadas)
+                {
+                    // Por cada tarea calculo aplico la formula overbudget.
+                    var perfilTarea = dbContext.Perfil.Where(p => p.Idperfil == tarea.Idperfil).First();
+                    importeHorasOverbudget = importeHorasOverbudget + (int) tarea.HorasOverbudget * (int) perfilTarea.ValorHora / 2;
+                }
 
                 if (horas.Count == 0)
                 {
@@ -70,11 +84,14 @@ namespace BackendGestionProyectosLiquidaciones.Service
                                                            x.CantidadHoraTrabajada * dbContext.Perfil.Find(x.Idperfil).ValorHora
                                                            : (x.CantidadHoraTrabajada - 8) * dbContext.Perfil.Find(x.Idperfil).ValorHora * (float)1.5 + (8 * dbContext.Perfil.Find(x.Idperfil).ValorHora));
 
+                liquidacion.ImporteLiquidacion = liquidacion.ImporteLiquidacion - importeHorasOverbudget;
+
                 // Chequeo si realizo horas bajo más de un perfil
                 var perfiles = horas.Select(x => x.Idperfil).Distinct().Count();
                 if (perfiles > 1)
                 {
                     importe = (double)liquidacion.ImporteLiquidacion * dbContext.EscalaPerfiles.Where(ep => ep.CantidadPerfiles == perfiles).FirstOrDefault().PorcentajeAumentoPerfil / 100;
+                    liquidacion.IdescalaPerfil = dbContext.EscalaPerfiles.Where(ep => ep.CantidadPerfiles == perfiles).FirstOrDefault().IdescalaPerfil;
                 }
 
                 // Agrego porcentaje por antiguedad
@@ -87,10 +104,9 @@ namespace BackendGestionProyectosLiquidaciones.Service
                     }
                     else
                     {
-                        importe = importe + (double)(liquidacion.ImporteLiquidacion * (antiguedad / 100));
-                        liquidacion.IdescalaAntiguedad = 1;
+                        importe = importe + (double)(liquidacion.ImporteLiquidacion * (dbContext.EscalaAntiguedad.Find(1).PorcentajeAumentoAnt / 100));
+                        liquidacion.IdescalaAntiguedad = 2;
                     }
-                    
                 }
 
                 // Agrego porcentaje por cantidad de horas trabajadas
@@ -98,13 +114,13 @@ namespace BackendGestionProyectosLiquidaciones.Service
 
                 if (cantHoras >= 200)
                 {
-                    importe = importe + (double)liquidacion.ImporteLiquidacion * dbContext.EscalaHoras.Find(4).PorcentajeAumentoHoras / 100;
-                    liquidacion.IdescalaHoras = dbContext.EscalaHoras.Find(4).IdescalaHoras;
+                    importe = importe + (double)liquidacion.ImporteLiquidacion * dbContext.EscalaHoras.Find(2).PorcentajeAumentoHoras / 100;
+                    liquidacion.IdescalaHoras = dbContext.EscalaHoras.Find(2).IdescalaHoras;
                 }
                 else if (cantHoras >= 150)
                 {
-                    importe = importe + (double)liquidacion.ImporteLiquidacion * dbContext.EscalaHoras.Find(3).PorcentajeAumentoHoras / 100;
-                    liquidacion.IdescalaHoras = dbContext.EscalaHoras.Find(3).IdescalaHoras;
+                    importe = importe + (double)liquidacion.ImporteLiquidacion * dbContext.EscalaHoras.Find(1).PorcentajeAumentoHoras / 100;
+                    liquidacion.IdescalaHoras = dbContext.EscalaHoras.Find(1).IdescalaHoras;
                 }
 
                 liquidacion.ImporteLiquidacion = liquidacion.ImporteLiquidacion + importe;
