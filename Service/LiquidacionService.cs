@@ -49,7 +49,8 @@ namespace BackendGestionProyectosLiquidaciones.Service
                 // Traigo las adeudadas
                 List<HoraTrabajada> horas = dbContext.HoraTrabajada
                                                         .Where(ht => ht.Idempleado == liquidacion.Idempleado
-                                                                && ht.EstadoHoraTrabajada == "ADEUDADAS")
+                                                                && ht.EstadoHoraTrabajada == "ADEUDADAS" 
+                                                                && ht.FechaHoraTrabajada.Month == (liquidacion.MesLiquidado + 1))
                                                         .ToList();
 
                 List<Tarea> tareasAdeudadas = new List<Tarea>(); ;
