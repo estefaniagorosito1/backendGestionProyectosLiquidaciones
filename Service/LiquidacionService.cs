@@ -45,12 +45,11 @@ namespace BackendGestionProyectosLiquidaciones.Service
                 DateTime fechaIngreso = dbContext.Empleado.Find(liquidacion.Idempleado).FechaIngresoEmpleado;
                 int antiguedad = DateTime.Today.Year - fechaIngreso.Year;
 
-                // Horas trabajadas ht.FechaHoraTrabajada.Month == liquidacion.MesLiquidado
                 // Traigo las adeudadas
                 List<HoraTrabajada> horas = dbContext.HoraTrabajada
                                                         .Where(ht => ht.Idempleado == liquidacion.Idempleado
                                                                 && ht.EstadoHoraTrabajada == "ADEUDADAS" 
-                                                                && ht.FechaHoraTrabajada.Month == (liquidacion.MesLiquidado + 1))
+                                                                && ht.FechaHoraTrabajada.Month == liquidacion.MesLiquidado)
                                                         .ToList();
 
                 List<Tarea> tareasAdeudadas = new List<Tarea>(); ;

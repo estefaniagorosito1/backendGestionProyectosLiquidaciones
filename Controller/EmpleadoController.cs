@@ -31,6 +31,14 @@ namespace BackendGestionProyectosLiquidaciones.Controller
             return Ok(empleados);
         }
 
+        [HttpGet("rol")]
+        [Authorize]
+        public IActionResult FindEmpleadosRolEmpleado()
+        {
+            var empleados = _empleadoService.FindEmpleadosRolEmpleado();
+            return Ok(empleados);
+        }
+
         [HttpGet("usuario/{IdEmpleado}")]
         [Authorize]
         public IActionResult FindUsuarioById([FromRoute] int IdEmpleado)

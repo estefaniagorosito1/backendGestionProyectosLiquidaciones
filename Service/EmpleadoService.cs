@@ -13,6 +13,8 @@ namespace BackendGestionProyectosLiquidaciones.Service
 
         List<Empleado> FindEmpleadosByNombreApellido(string param);
 
+        List<Empleado> FindEmpleadosRolEmpleado();
+
         Empleado FindEmpleadoById(int IdEmpleado);
 
         void CrearEmpleado(Empleado empleado);
@@ -39,6 +41,31 @@ namespace BackendGestionProyectosLiquidaciones.Service
             {
                 var dbContext = scope.ServiceProvider.GetRequiredService<TpSeminarioContext>();
                 return dbContext.Empleado.ToList();
+            }
+        }
+
+        public List<Empleado> FindEmpleadosRolEmpleado()
+        {
+            using (var scope = _scopeFactory.CreateScope())
+            {
+                var dbContext = scope.ServiceProvider.GetRequiredService<TpSeminarioContext>();
+                var empleados = dbContext.Empleado.ToList();
+
+                List<Empleado> empleadosAQuitar = new List<Empleado>();
+
+                foreach (var item in empleados)
+                {
+                    var idRol = dbContext.Usuario.Where(us => us.Idempleado == item.Idempleado).Select(us => us.Idrol).First();
+
+                    if (idRol != 6)
+                    {
+                        empleadosAQuitar.Add(item);
+                    }
+                }
+
+                empleados.RemoveAll(x => empleadosAQuitar.Contains(x));
+
+                return empleados;
             }
         }
 
@@ -126,7 +153,6 @@ namespace BackendGestionProyectosLiquidaciones.Service
                 return false;
             }
         }
-
 
         public void EliminarEmpleaasdasddobackup(int IdEmpleado)
         {
