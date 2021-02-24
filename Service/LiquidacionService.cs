@@ -105,7 +105,7 @@ namespace BackendGestionProyectosLiquidaciones.Service
                     else
                     {
                         importe = importe + (double)(liquidacion.ImporteLiquidacion * (dbContext.EscalaAntiguedad.Find(1).PorcentajeAumentoAnt / 100));
-                        liquidacion.IdescalaAntiguedad = 2;
+                        liquidacion.IdescalaAntiguedad = 1;
                     }
                 }
 
