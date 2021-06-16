@@ -28,12 +28,12 @@ namespace BackendGestionProyectosLiquidaciones.Controller
         {
             var respuesta = _usuarioService.CrearUsuario(usuario);
 
-            if(!respuesta)
+            if (respuesta)
             {
-                return BadRequest("Error al crear el usuario");
+                return Ok();
             }
 
-            return Ok();
+            return BadRequest("Error al crear el usuario");
         }
 
         [HttpPut]
@@ -42,12 +42,12 @@ namespace BackendGestionProyectosLiquidaciones.Controller
         {
             var respuesta = _usuarioService.ModificarUsuario(usuario);
 
-            if(!respuesta)
+            if (respuesta)
             {
-                return BadRequest("Error al modificar el usuario.");
+                return Ok();
             }
 
-            return Ok();
+            return BadRequest("Error al modificar el usuario.");
         }
 
         [HttpDelete("{IdUsuario}")]
@@ -57,6 +57,14 @@ namespace BackendGestionProyectosLiquidaciones.Controller
             _usuarioService.EliminarUsuario(IdUsuario);
             return Ok();
 
+        }
+
+        [HttpGet("{IdEmpleado}")]
+        [Authorize]
+        public IActionResult GetUsuarioById([FromRoute] int IdEmpleado)
+        {
+            var usuario = _usuarioService.FindUsuarioByIdEmpleado(IdEmpleado);
+            return Ok(usuario);
         }
     }
 }

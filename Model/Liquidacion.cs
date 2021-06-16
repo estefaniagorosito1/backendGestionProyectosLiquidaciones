@@ -5,7 +5,7 @@ namespace BackendGestionProyectosLiquidaciones.Model
 {
     public partial class Liquidacion
     {
-        public int CodLiquidacion { get; set; }
+        public int? CodLiquidacion { get; set; }
         public DateTime? FechaLiquidacion { get; set; }
         public int? MesLiquidado { get; set; }
         public string Estado { get; set; }

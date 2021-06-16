@@ -1,0 +1,40 @@
+﻿using BackendGestionProyectosLiquidaciones.Model;
+using BackendGestionProyectosLiquidaciones.Service;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+
+namespace BackendGestionProyectosLiquidaciones.Controller
+{
+    [Authorize]
+    [ApiController]
+    [Route("[controller]")]
+    public class ProvinciaController : ControllerBase
+    {
+        private IProvinciaService _provinciaService;
+
+        public ProvinciaController(IProvinciaService provinciaService)
+        {
+            _provinciaService = provinciaService;
+        }
+
+        [HttpGet]
+        [Authorize]
+        public IActionResult GetProvincias()
+        {
+            List<Provincia> provincias = _provinciaService.GetProvincias();
+            return Ok(provincias);
+        }
+
+        [HttpGet("findOne/{IdProvincia}")]
+        [Authorize]
+        public IActionResult GetProvinciaById([FromRoute] int IdProvincia)
+        {
+            Provincia provincia = _provinciaService.GetProvinciaById(IdProvincia);
+            return Ok(provincia);
+        }
+    }
+}

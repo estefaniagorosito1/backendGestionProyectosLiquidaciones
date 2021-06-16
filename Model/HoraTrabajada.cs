@@ -5,7 +5,7 @@ namespace BackendGestionProyectosLiquidaciones.Model
 {
     public partial class HoraTrabajada
     {
-        public int IdhoraTrabajada { get; set; }
+        public int? IdhoraTrabajada { get; set; }
         public int Idproyecto { get; set; }
         public int Idtarea { get; set; }
         public int CantidadHoraTrabajada { get; set; }

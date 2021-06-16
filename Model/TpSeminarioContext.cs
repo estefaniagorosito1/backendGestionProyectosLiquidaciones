@@ -32,13 +32,14 @@ namespace BackendGestionProyectosLiquidaciones.Model
         public virtual DbSet<Tarea> Tarea { get; set; }
         public virtual DbSet<Usuario> Usuario { get; set; }
 
+        /*
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
             {
                 optionsBuilder.UseSqlServer("Server=.\\SQLEXPRESS;Database=TpSeminario;Trusted_Connection=True;");
             }
-        }
+        }*/
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -348,6 +349,11 @@ namespace BackendGestionProyectosLiquidaciones.Model
                 entity.Property(e => e.DescripcionTarea)
                     .HasMaxLength(255)
                     .IsUnicode(false);
+
+                entity.Property(e => e.finalizada)
+                      .HasColumnName("Finalizada")
+                      .HasMaxLength(50)
+                      .IsUnicode(false);
 
                 entity.Property(e => e.Idempleado).HasColumnName("IDEmpleado");
 

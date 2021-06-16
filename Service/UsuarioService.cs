@@ -3,15 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BackendGestionProyectosLiquidaciones.Model;
-using BackendGestionProyectosLiquidaciones.Dao;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace BackendGestionProyectosLiquidaciones.Service
 {
     public interface IUsuarioService
     {
-        Usuario FindUsuario(Usuario usuario);
+        Usuario FindUsuario(string username, string password);
 
         Usuario FindUsuarioById(int IdUsuario);
+
+        Usuario FindUsuarioByIdEmpleado(int IdEmpleado);
 
         bool CrearUsuario(Usuario usuario);
 
@@ -24,36 +26,93 @@ namespace BackendGestionProyectosLiquidaciones.Service
 
     public class UsuarioService : IUsuarioService
     {
-        private UsuarioDao _usuarioDao;
+        public IServiceScopeFactory _scopeFactory;
 
-        public UsuarioService(UsuarioDao usuarioDao)
+        public UsuarioService(IServiceScopeFactory scopeFactory)
         {
-            _usuarioDao = usuarioDao;
+            _scopeFactory = scopeFactory;
         }
 
-        public Usuario FindUsuario(Usuario usuario)
+        public Usuario FindUsuario(string username, string password)
         {
-            return _usuarioDao.FindUsuario(usuario);
+            using (var scope = _scopeFactory.CreateScope())
+            {
+                var dbContext = scope.ServiceProvider.GetRequiredService<TpSeminarioContext>();
+
+                return dbContext.Usuario.FirstOrDefault(user => user.NombreUsuario == username
+                                           & user.PasswordUsuario == password);
+            }
         }
 
         public Usuario FindUsuarioById(int IdUsuario)
         {
-            return _usuarioDao.FindUsuarioByID(IdUsuario);
+            using (var scope = _scopeFactory.CreateScope())
+            {
+                var dbContext = scope.ServiceProvider.GetRequiredService<TpSeminarioContext>();
+                return dbContext.Usuario.FirstOrDefault(user => user.Idusuario == IdUsuario);
+            }
+        }
+
+        public Usuario FindUsuarioByIdEmpleado(int IdEmpleado)
+        {
+            using (var scope = _scopeFactory.CreateScope())
+            {
+                var dbContext = scope.ServiceProvider.GetRequiredService<TpSeminarioContext>();
+                Usuario usuario = dbContext.Usuario.FirstOrDefault(user => user.Idempleado == IdEmpleado);
+                return usuario;
+            }
         }
 
         public bool CrearUsuario(Usuario usuario)
         {
-            return _usuarioDao.CrearUsuario(usuario);
+            var user = FindUsuarioById(usuario.Idusuario);
+
+            if (user == null)
+            {
+
+                using (var scope = _scopeFactory.CreateScope())
+                {
+                    var dbContext = scope.ServiceProvider.GetRequiredService<TpSeminarioContext>();
+                    dbContext.Usuario.Add(usuario);
+                    dbContext.SaveChanges();
+                }
+
+                return true;
+            }
+
+            return false;
         }
 
         public bool ModificarUsuario(Usuario usuario)
         {
-            return _usuarioDao.ModificarUsuario(usuario);
+            var user = FindUsuarioById(usuario.Idusuario);
+            if (user != null)
+            {
+
+                using (var scope = _scopeFactory.CreateScope())
+                {
+                    var dbContext = scope.ServiceProvider.GetRequiredService<TpSeminarioContext>();
+                    dbContext.Update(usuario);
+                    dbContext.SaveChanges();
+                }
+
+                return true;
+            }
+
+            return false;
         }
 
         public void EliminarUsuario(int IdUsuario)
         {
-            _usuarioDao.EliminarUsuario(IdUsuario);
+                var user = FindUsuarioById(IdUsuario);
+
+            using (var scope = _scopeFactory.CreateScope())
+            {
+                var dbContext = scope.ServiceProvider.GetRequiredService<TpSeminarioContext>();
+                dbContext.Usuario.Remove(user);
+                dbContext.SaveChanges();
+            }
+
         }
     }
 }

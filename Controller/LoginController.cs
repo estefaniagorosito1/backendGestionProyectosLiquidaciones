@@ -11,6 +11,9 @@ using System.Text;
 using System.Security.Claims;
 using Microsoft.IdentityModel.Tokens;
 using BackendGestionProyectosLiquidaciones;
+using Microsoft.Extensions.Options;
+using System.IO;
+using Newtonsoft.Json;
 
 namespace BackendGestionProyectosLiquidaciones.Controller
 {
@@ -19,22 +22,35 @@ namespace BackendGestionProyectosLiquidaciones.Controller
     [Route("[controller]")]
     public class LoginController : ControllerBase
     {
-        private UsuarioService _usuarioService;
-        private readonly string signkey = "THIS IS USED TO SIGN AND VERIFY JWT TOKENS";
+        private IUsuarioService _usuarioService;
+        private readonly string signkey = "$3M1N@R10PUN70N3T";
 
-        public LoginController(UsuarioService usuarioService)
+        public LoginController(IUsuarioService usuarioService)
         {
             _usuarioService = usuarioService;
         }
 
         [HttpPost]
         [AllowAnonymous]
-        public IActionResult authenticate([FromBody] Usuario usuario)
+        public IActionResult Authenticate()
         {
+            StreamReader sr = new StreamReader(Request.Body);
+            var bodyString = sr.ReadToEnd();
+            User body = new User();
 
-            Usuario user = _usuarioService.FindUsuario(usuario);
+            try
+            {
+                body = JsonConvert.DeserializeObject<User>(bodyString);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
 
-            if(user == null)
+            Usuario user = _usuarioService.FindUsuario(body.user, body.password);
+            
+
+            if (user == null)
             {
                 return BadRequest("Usuario y/o contraseña incorrectos.");
             }
@@ -43,10 +59,10 @@ namespace BackendGestionProyectosLiquidaciones.Controller
             var key = Encoding.ASCII.GetBytes(signkey);
             var tokenDescriptor = new SecurityTokenDescriptor
             {
-                Subject = new ClaimsIdentity(new Claim[]
+                Subject = new ClaimsIdentity(new []
                 {
-                    new Claim(ClaimTypes.Name, user.NombreUsuario),
-                    new Claim(ClaimTypes.Role, user.IdrolNavigation.DescripcionRol),
+                    new Claim(ClaimTypes.Name, user.Idusuario.ToString()),
+                    new Claim(ClaimTypes.Role, user.Idrol.ToString()),
                 }),
                 Expires = DateTime.UtcNow.AddDays(1),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
@@ -55,7 +71,8 @@ namespace BackendGestionProyectosLiquidaciones.Controller
             var token = tokenHandler.CreateToken(tokenDescriptor);
             var tokenString = tokenHandler.WriteToken(token);
 
-            return Ok(new {
+            return Ok(new
+            {
                 Idusuario = user.Idusuario,
                 Username = user.NombreUsuario,
                 IdRol = user.Idrol,
@@ -64,6 +81,13 @@ namespace BackendGestionProyectosLiquidaciones.Controller
                 Token = tokenString
             });
         }
+    }
+
+    // Clase usada únicamente en el login para recuperar los parámetros del body
+    public class User
+    {
+        public string user { get; set; }
+        public string password { get; set; }
     }
 
 }

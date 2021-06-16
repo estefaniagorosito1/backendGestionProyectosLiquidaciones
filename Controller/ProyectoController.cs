@@ -11,35 +11,29 @@ namespace BackendGestionProyectosLiquidaciones.Controller
 {
     [Authorize]
     [ApiController]
-    [Route("controller")]
+    [Route("[controller]")]
     public class ProyectoController : ControllerBase
     {
-        private ProyectoService _proyectoService;
+        private IProyectoService _proyectoService;
 
-        public ProyectoController(ProyectoService proyectoService)
+        public ProyectoController(IProyectoService proyectoService)
         {
             _proyectoService = proyectoService;
         }
 
         [HttpGet]
-        //[Authorize(Roles = "Usuario")]
+        [Authorize]
         public IActionResult GetProyectos()
         {
-            var proyectos = _proyectoService.GetProyectos();
-
-            if (proyectos.Count == 0)
-            {
-                return NotFound("No se encontraron proyectos");
-            }
-
+            var proyectos = _proyectoService.FindProyectos();
             return Ok(proyectos);
         }
 
-        [HttpGet("/cliente/{idcliente}")]
-        //[Authorize(Roles = "Usuario")]
+        [HttpGet("cliente/{idcliente}")]
+        [Authorize]
         public IActionResult GetProyectosByCliente([FromRoute] int IdCliente)
         {
-            var proyectosCliente = _proyectoService.GetProyectosByCliente(IdCliente);
+            var proyectosCliente = _proyectoService.FindProyectosByCliente(IdCliente);
 
             if (proyectosCliente.Count == 0)
             {
@@ -49,11 +43,11 @@ namespace BackendGestionProyectosLiquidaciones.Controller
             return Ok(proyectosCliente);
         }
 
-        [HttpGet("/bynombre/{nombre}")]
-        //[Authorize(Roles = "Usuario")]
+        [HttpGet("bynombre/{nombre}")]
+        [Authorize]
         public IActionResult GetProyectosByNombre([FromRoute] string nombre)
         {
-            var proyectos = _proyectoService.GetProyectosByNombre(nombre);
+            var proyectos = _proyectoService.FindProyectosByNombre(nombre);
 
             if (proyectos.Count == 0)
             {
@@ -64,35 +58,29 @@ namespace BackendGestionProyectosLiquidaciones.Controller
         }
 
         [HttpPost]
-        //[Authorize(Roles = "Usuario")]
+        [Authorize]
         public IActionResult CrearProyecto([FromBody] Proyecto proyecto)
         {
-            bool respuesta = _proyectoService.CrearProyecto(proyecto);
-
-            if (!respuesta)
-            {
-                return NotFound("No se pudo crear el proyecto");
-            }
-
+            _proyectoService.CrearProyecto(proyecto);
             return Ok("Proyecto creado correctamente");
         }
 
         [HttpPut]
-        //[Authorize(Roles = "Usuario")]
+        [Authorize]
         public IActionResult ModificarProyecto([FromBody] Proyecto proyecto)
         {
             bool respuesta = _proyectoService.ModificarProyecto(proyecto);
 
-            if (!respuesta)
+            if (respuesta)
             {
-                return BadRequest("No se pudo modificar el proyecto");
+                return Ok("Proyecto modificado correctamente");
             }
 
-            return Ok("Proyecto modificado correctamente");
+            return BadRequest("No se pudo modificar el proyecto");
         }
 
-        [HttpDelete("/{IdProyecto}")]
-        //[Authorize(Roles = "Usuario")]
+        [HttpDelete("{IdProyecto}")]
+        [Authorize]
         public IActionResult EliminarProyecto([FromRoute] int IdProyecto)
         {
             _proyectoService.EliminarProyecto(IdProyecto);

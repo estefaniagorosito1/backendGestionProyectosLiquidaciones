@@ -13,7 +13,7 @@ namespace BackendGestionProyectosLiquidaciones.Model
             Usuario = new HashSet<Usuario>();
         }
 
-        public int Idempleado { get; set; }
+        public int? Idempleado { get; set; }
         public string NombreEmpleado { get; set; }
         public string ApellidoEmpleado { get; set; }
         public long? DniEmpleado { get; set; }
