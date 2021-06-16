@@ -351,6 +351,7 @@ namespace BackendGestionProyectosLiquidaciones.Model
                     .IsUnicode(false);
 
                 entity.Property(e => e.finalizada)
+                      .HasColumnName("Finalizada")
                       .HasMaxLength(50)
                       .IsUnicode(false);
 
